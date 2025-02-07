@@ -52,8 +52,11 @@ def showSubMatrix(img, i, j, canal, dim):
     print(img[i:i+dim, j:j+dim, canal])
 
 def main():
+    # NOTE: Change this value for a different default image
+    default_image = './images/airport.bmp'
+
     parser = argparse.ArgumentParser(description='Read an image file and convert it to a NumPy array.')
-    parser.add_argument('image_path', type=str, help='The path to the image file to be read.')
+    parser.add_argument('image_path', nargs='?', type=str, default=default_image, help='The path to the image file to be read.')
 
     args = parser.parse_args()
 
