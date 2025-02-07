@@ -9,7 +9,7 @@ date: \today
 
 ## 1: Compressão de imagens bmp no formato jpeg utilizando um editor de imagem (e.g., GIMP).
 
-Airport: 
+Airport:
 
 | Quality | Ratio |
 | -------------- | --------------- |
