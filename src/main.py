@@ -66,9 +66,9 @@ def main():
 
     print(type(img))
     print(img.shape)
-    print(img[0:8, 0:8, 0])
+    print(img[8:16, 8:16, 0])
     print(img.dtype)
-    showSubMatrix(img, 0, 0, 2, 8)
+    # showSubMatrix(img, 0, 0, 2, 8)
 
     showImg(img, image_filepath)
     R,G,B = encoder(img)
@@ -84,7 +84,7 @@ def main():
     # cmPersonalizado = criarColorMap()
     # showImg(G, "Personalizado", cmPersonalizado)
 
-    print(imgRec)
+    print(imgRec[8:16, 8:16, 0])
     showImg(imgRec, "Decodificada")
 
 
