@@ -16,8 +16,9 @@
           venvDir = ".venv";
           packages = with pkgs; [ python311 ] ++
             (with pkgs.python311Packages; [
-              numpy
+              bpython
               matplotlib
+              numpy
               pip
               venvShellHook
             ])
