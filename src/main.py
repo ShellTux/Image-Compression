@@ -7,7 +7,7 @@ from step1_color_space_conversion import rgb_to_ycbcr
 DEBUG: bool = True
 
 def encoder(img: np.ndarray) -> np.ndarray:
-    preprocessing(img)
+    img = preprocessing(img)
     # TODO(Luís Góis): Add unit test to confirm that the RGB image is 32x32 padded
     ycbcr_image = rgb_to_ycbcr(img)
 
