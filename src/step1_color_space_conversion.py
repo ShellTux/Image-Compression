@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from common import IMAGES
+from common import IMAGES, RGB_TO_YCBCR_MATRIX, RGB_TO_YCBCR_OFFSET, YCBCR_TO_RGB_MATRIX
 
 def rgb_from_ndarray(img: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     r, g, b = np.rollaxis(img, axis=-1)
     return r, g, b
 
-def rgb_to_ycbcr(rgb_image: np.ndarray):
+def rgb_to_ycbcr(red: np.ndarray, green: np.ndarray, blue: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Convert image from RGB to YCbCr color space.
 
@@ -17,21 +17,22 @@ def rgb_to_ycbcr(rgb_image: np.ndarray):
     Returns:
         ndarray: YCbCr image.
     """
-    r, g, b = rgb_from_ndarray(rgb_image)
 
-    y = 0.299 * r + 0.587 * g + 0.114 * b
-    cb = 128 + (-0.168736 * r - 0.331264 * g + 0.5 * b)
-    cr = 128 + (0.5 * r - 0.418688 * g - 0.081312 * b)
+    # TODO(Luís Góis): eu tentei multiplicação de matrizes mas
+    # não consigo meter isso a funcionar
+    y = 0.299 * red + 0.587 * green + 0.114 * blue
+    cb = -0.168736 * red - 0.331264 * green + 0.5 * blue
+    cr = 0.5 * red - 0.418688 * green - 0.081312 * blue
 
-    return np.stack([y, cb, cr], axis=-1)
+    cb += 128
+    cr += 128
+
+    return y, cb, cr
 
 def ycbcr_to_rgb(ycbcr_img):
     ycbcr = ycbcr_img.astype(np.float32)
     ycbcr[..., [1,2]] -= 128
-    matrix = np.array([[1, 0, 1.402],
-                       [1, -0.34414, -0.71414],
-                       [1, 1.772, 0]])
-    return np.clip(np.dot(ycbcr, matrix.T), 0, 255).astype(np.uint8)
+    return ycbcr.dot(YCBCR_TO_RGB_MATRIX).clip(0, 255).astype(np.uint8)
 
 def main():
     for image in IMAGES:
@@ -39,9 +40,11 @@ def main():
 
         image = plt.imread(image)
 
-        ycbcr_image = rgb_to_ycbcr(image)
+        r, g, b = rgb_from_ndarray(image)
 
-        print(ycbcr_image)
+        y, cb, cr = rgb_to_ycbcr(r, g, b)
+
+        print(y, cb, cr)
         break
 
 if __name__ == "__main__":

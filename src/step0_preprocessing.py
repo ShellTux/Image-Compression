@@ -4,7 +4,7 @@ def preprocessing(img: np.ndarray) -> np.ndarray:
     img = padding(img, (32, 32))
     return img
 
-def padding(img: np.ndarray, size: tuple[int, int]) -> np.ndarray:
+def padding(img: np.ndarray, size: tuple) -> np.ndarray:
     """
     Pads an image with zeros to a specified size.
 
@@ -24,12 +24,11 @@ def padding(img: np.ndarray, size: tuple[int, int]) -> np.ndarray:
         raise TypeError("img must be a numpy ndarray")
     if not isinstance(size, tuple):
         raise TypeError("size must be a tuple")
-    if len(size) != 2:
-        raise ValueError("size must have two elements (height, width)")
 
     padded_needed = size - (np.array(img.shape) % size)
+    print(padded_needed)
 
-    return np.pad(img, (0, padded_needed[1]))
+    return np.pad(img, (0, padded_needed[1]), mode='edge')[:img.shape[0]]
 
 def main():
     pass

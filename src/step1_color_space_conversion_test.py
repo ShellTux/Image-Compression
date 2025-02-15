@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from step1_color_space_conversion import rgb_from_ndarray, rgb_to_ycbcr
 import numpy as np
 
-def test_rgb():
+def test_rgb_from_ndarray():
     img = plt.imread(TEST_IMAGE)
     r, _, _ = rgb_from_ndarray(img)
     r = r[8:16, 8:16]
@@ -17,10 +17,10 @@ def test_rgb():
                            [223, 220, 220, 223, 223, 219, 219, 219]])
     assert np.array_equal(r, expected_r), f'\n{r}\n!=\n{expected_r}'
 
-def test_ycbcr():
+def test_rgb_to_ycbcr():
     img = plt.imread(TEST_IMAGE)
-    ycbcr_img = rgb_to_ycbcr(img)
-    y, cb, _ = np.rollaxis(ycbcr_img, axis=-1)
+    r, g, b = rgb_from_ndarray(img)
+    y, cb, _ = rgb_to_ycbcr(r, g, b)
 
     y = y[8:16, 8:16]
     cb = cb[8:16, 8:16]
