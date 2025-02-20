@@ -20,6 +20,7 @@
               matplotlib
               numpy
               pip
+              scipy
               venvShellHook
             ])
             ++ [
