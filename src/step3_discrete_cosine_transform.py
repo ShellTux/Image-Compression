@@ -108,42 +108,72 @@ def recover_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.ndarray) 
     
     return Y, Cb, Cr
 
-def dct(image, block_size=8):
+def dct_blocks(image: np.ndarray, block_size: int = 8) -> np.ndarray:
     """
-    Apply the Discrete Cosine Transform to the image.
+    Aplica a DCT em blocos de tamanho block_size x block_size.
 
     Args:
-        image (ndarray): Downsampled image.
-        block_size (int): Size of the block.
+        image (np.ndarray): Imagem de entrada.
+        block_size (int): Tamanho do bloco.
 
     Returns:
-        ndarray: DCT-applied image.
+        np.ndarray: Imagem transformada pela DCT.
     """
-    h, w, _ = image.shape
+    h, w = image.shape
+    dct_image = np.zeros_like(image)
 
-    # Create a new image
-    dct_image = np.zeros(image.shape)
-
-    # Apply DCT in 8x8 blocks
     for i in range(0, h, block_size):
         for j in range(0, w, block_size):
             block = image[i:i + block_size, j:j + block_size]
+            dct_image[i:i + block_size, j:j + block_size] = dct_channel(block)
 
-            # Create the DCT matrix
-            dct_matrix = np.zeros_like(block)
+    return dct_image
 
-            # Apply DCT formula
-            for u, v, x, y in product(range(block_size), range(block_size), range(block_size), range(block_size)):
-                dct_matrix[x, y] += block[x, y] * np.cosh(np.pi * (u + 0.5) / block_size) * np.cos(np.pi * (x + 0.5) / block_size) * np.cos(np.pi * (y + 0.5) / block_size)
+def idct_blocks(image: np.ndarray, block_size: int = 8) -> np.ndarray:
+    """
+    Aplica a IDCT em blocos de tamanho block_size x block_size.
 
-            # Store the DCT block in the new image
-            dct_image[i:i + block_size, j:j + block_size] = dct_matrix
+    Args:
+        image (np.ndarray): Imagem transformada pela DCT.
+        block_size (int): Tamanho do bloco.
+
+    Returns:
+        np.ndarray: Imagem recuperada pela IDCT.
+    """
+    h, w = image.shape
+    idct_image = np.zeros_like(image)
+
+    for i in range(0, h, block_size):
+        for j in range(0, w, block_size):
+            block = image[i:i + block_size, j:j + block_size]
+            idct_image[i:i + block_size, j:j + block_size] = idct_channel(block)
+
+    return idct_image
+
+def dct_blocks_64(image: np.ndarray, block_size: int = 64) -> np.ndarray:
+    """
+    Aplica a DCT em blocos de tamanho block_size x block_size.
+
+    Args:
+        image (np.ndarray): Imagem de entrada.
+        block_size (int): Tamanho do bloco.
+
+    Returns:
+        np.ndarray: Imagem transformada pela DCT.
+    """
+    h, w = image.shape
+    dct_image = np.zeros_like(image)
+
+    for i in range(0, h, block_size):
+        for j in range(0, w, block_size):
+            block = image[i:i + block_size, j:j + block_size]
+            dct_image[i:i + block_size, j:j + block_size] = dct_channel(block)
 
     return dct_image
 
 def main():
     # Exemplo de uso
-    from matplotlib.pyplot import imread
+    from matplotlib.pyplot import imread, imshow, show
     from common import IMAGES
     from step1_color_space_conversion import rgb_to_ycbcr
     
@@ -163,6 +193,24 @@ def main():
     # Visualiza os resultados da DCT
     print("\nVisualizando resultados da DCT (usando transformação logarítmica)...")
     visualize_dct_channels(Y_dct, Cb_dct, Cr_dct)
+
+    # 7.2.3: Encoder - Aplicar DCT em blocos 8x8
+    Y_dct8 = dct_blocks(Y)
+    Cb_dct8 = dct_blocks(Cb)
+    Cr_dct8 = dct_blocks(Cr)
+
+    # Visualizar as imagens obtidas
+    print("\nVisualizando resultados da DCT em blocos 8x8...")
+    visualize_dct_channels(Y_dct8, Cb_dct8, Cr_dct8)
+
+    # 7.3: Aplicar DCT em blocos 64x64
+    Y_dct64 = dct_blocks_64(Y)
+    Cb_dct64 = dct_blocks_64(Cb)
+    Cr_dct64 = dct_blocks_64(Cr)
+
+    # Visualizar as imagens obtidas
+    print("\nVisualizando resultados da DCT em blocos 64x64...")
+    visualize_dct_channels(Y_dct64, Cb_dct64, Cr_dct64)
 
 if __name__ == "__main__":
     main()
