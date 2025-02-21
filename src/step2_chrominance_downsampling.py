@@ -98,9 +98,13 @@ def main():
 
         # Decoder - Reconstrução (upsampling)
         image_reconstructed = upsample_ycbcr(Y_d, Cb_d, Cr_d, sampling="4:2:0", interpolation=cv2.INTER_CUBIC)
-
+        
         # Converter de volta para RGB para comparação
-        image_rgb_reconstructed = ycbcr_to_rgb(image_reconstructed)  # Converter de volta para RGB
+        y_r, cb_r, cr_r = cv2.split(image_reconstructed)
+        r, g, b = ycbcr_to_rgb(y_r, cb_r, cr_r)
+        image_rgb_reconstructed = cv2.merge([r, g, b])
+
+        image_rgb_reconstructed = np.clip(image_rgb_reconstructed, 0, 255).astype(np.uint8)
 
         # Mostrar imagem reconstruída
         plt.figure()
