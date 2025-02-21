@@ -29,10 +29,26 @@ def rgb_to_ycbcr(red: np.ndarray, green: np.ndarray, blue: np.ndarray) -> tuple[
 
     return y, cb, cr
 
-def ycbcr_to_rgb(ycbcr_img):
-    ycbcr = ycbcr_img.astype(np.float32)
-    ycbcr[..., [1,2]] -= 128
-    return ycbcr.dot(YCBCR_TO_RGB_MATRIX).clip(0, 255).astype(np.uint8)
+def ycbcr_to_rgb(y: np.ndarray, cb: np.ndarray, cr: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Convert image from YCbCr to RGB color space.
+
+    Args:
+        y (ndarray): Y channel
+        cb (ndarray): Cb channel
+        cr (ndarray): Cr channel
+
+    Returns:
+        tuple: (r, g, b) channels
+    """
+    cb = cb - 128
+    cr = cr - 128
+
+    r = y + 1.402 * cr
+    g = y - 0.344136 * cb - 0.714136 * cr
+    b = y + 1.772 * cb
+
+    return r, g, b
 
 def main():
     for image in IMAGES:
