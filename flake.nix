@@ -19,14 +19,18 @@
               bpython
               matplotlib
               numpy
+              opencv-python
               pip
               scipy
               venvShellHook
             ])
             ++ [
                 pkgs.ffmpeg
+                pkgs.gnumake
                 pkgs.imv
+                pkgs.pandoc
                 pkgs.qiv
+                pkgs.texliveFull
             ];
         };
       });

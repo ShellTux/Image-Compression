@@ -1,24 +1,9 @@
-import numpy as np
-from matplotlib import pyplot as plt
 from common import IMAGES
-from step0_preprocessing import preprocessing
-from step1_color_space_conversion import rgb_from_ndarray, rgb_to_ycbcr
+from decoder import decoder
+from encoder import encoder
+from matplotlib import pyplot as plt
 
 DEBUG: bool = True
-
-def encoder(img: np.ndarray) -> np.ndarray:
-    r, g, b = rgb_from_ndarray(img)
-    r = preprocessing(r)
-    g = preprocessing(g)
-    b = preprocessing(b)
-
-    # TODO(Luís Góis): Add unit test to confirm that the RGB image is 32x32 padded
-    _ = rgb_to_ycbcr(r, g, b)
-
-    return np.zeros(1)
-
-def decoder(img: np.ndarray) -> np.ndarray:
-    return img
 
 def main():
     for image in IMAGES:
@@ -26,7 +11,7 @@ def main():
 
         img = plt.imread(image)
 
-        jpeg_img = encoder(img)
+        jpeg_img, _ = encoder(img)
         if DEBUG:
             print(f'{jpeg_img=}')
 

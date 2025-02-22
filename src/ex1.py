@@ -1,4 +1,4 @@
-from common import IMAGES, QUALITIES
+from common import BUILD_DIR, IMAGES, QUALITIES
 from sys import stderr
 import ffmpeg
 import itertools
@@ -61,7 +61,7 @@ def compress_image(image_path: str, build_dir: str, quality: int) -> tuple[str, 
 
 def ex1():
     for image, quality in itertools.product(IMAGES, QUALITIES):
-        compressed_path, compression_ratio = compress_image(image, './build', quality)
+        compressed_path, compression_ratio = compress_image(image, BUILD_DIR, quality)
         print(f'{image} -> {compressed_path}: {compression_ratio=:.2f}')
 
 def main():

@@ -1,10 +1,10 @@
-from common import IMAGES
+from common import DEFAULT_DOWNSAMPLE, IMAGES, VALID_DOWNSAMPLES, VALID_DOWNSAMPLES_TYPE
 from matplotlib import pyplot as plt
 from step1_color_space_conversion import rgb_to_ycbcr, ycbcr_to_rgb
 import numpy as np
 import cv2
 
-def downsample_ycbcr(image, sampling="4:2:0", interpolation=cv2.INTER_LINEAR):
+def downsample_ycbcr(ycbcr_image: np.ndarray, sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE, interpolation=cv2.INTER_LINEAR):
     """
     Realiza a sub-amostragem dos canais YCbCr com diferentes formatos suportados pelo JPEG.
 
@@ -16,7 +16,10 @@ def downsample_ycbcr(image, sampling="4:2:0", interpolation=cv2.INTER_LINEAR):
     Returns:
         tuple: Y_d, Cb_d, Cr_d (canais subamostrados)
     """
-    Y, Cb, Cr = cv2.split(image)
+
+    assert sampling in VALID_DOWNSAMPLES, f'Invalid downsampling: {downsampling}. Needs to be one of the following: {VALID_DOWNSAMPLES}'
+
+    Y, Cb, Cr = cv2.split(ycbcr_image)
     h, w = Y.shape
 
     if sampling == "4:2:0":
@@ -27,10 +30,10 @@ def downsample_ycbcr(image, sampling="4:2:0", interpolation=cv2.INTER_LINEAR):
         Cr_d = cv2.resize(Cr, (w // 2, h), interpolation=interpolation)
     else:
         raise ValueError(f"Invalid sampling value: {sampling}. Use '4:2:0' or '4:2:2'.")
-    
+
     return Y, Cb_d, Cr_d
 
-def upsample_ycbcr(Y, Cb_d, Cr_d, sampling="4:2:0", interpolation=cv2.INTER_LINEAR):
+def upsample_ycbcr(Y: np.ndarray, Cb_d: np.ndarray, Cr_d: np.ndarray, sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE, interpolation=cv2.INTER_LINEAR):
     """
     Reverte a sub-amostragem, restaurando os canais Cb e Cr ao tamanho original.
 
@@ -45,6 +48,8 @@ def upsample_ycbcr(Y, Cb_d, Cr_d, sampling="4:2:0", interpolation=cv2.INTER_LINE
         ndarray: Imagem reconstruída no espaço YCbCr.
     """
     h, w = Y.shape
+
+    assert sampling in VALID_DOWNSAMPLES, f'Invalid downsampling: {downsampling}. Needs to be one of the following: {VALID_DOWNSAMPLES}'
 
     if sampling == "4:2:0":
         Cb_u = cv2.resize(Cb_d, (w, h), interpolation=interpolation)
@@ -98,7 +103,7 @@ def main():
 
         # Decoder - Reconstrução (upsampling)
         image_reconstructed = upsample_ycbcr(Y_d, Cb_d, Cr_d, sampling="4:2:0", interpolation=cv2.INTER_CUBIC)
-        
+
         # Converter de volta para RGB para comparação
         y_r, cb_r, cr_r = cv2.split(image_reconstructed)
         r, g, b = ycbcr_to_rgb(y_r, cb_r, cr_r)

@@ -1,7 +1,8 @@
-import numpy as np
+from common import DOCS_DIR, IMAGES, RGB_TO_YCBCR_MATRIX, RGB_TO_YCBCR_OFFSET, YCBCR_TO_RGB_MATRIX, generate_path
+import encoder
 import matplotlib.pyplot as plt
-
-from common import IMAGES, RGB_TO_YCBCR_MATRIX, RGB_TO_YCBCR_OFFSET, YCBCR_TO_RGB_MATRIX
+import numpy as np
+import os
 
 def rgb_from_ndarray(img: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     r, g, b = np.rollaxis(img, axis=-1)
@@ -51,17 +52,48 @@ def ycbcr_to_rgb(y: np.ndarray, cb: np.ndarray, cr: np.ndarray) -> tuple[np.ndar
     return r, g, b
 
 def main():
-    for image in IMAGES:
-        print(f'{image=}')
+    for image_path in IMAGES:
+        print(f'{image_path=}')
 
-        image = plt.imread(image)
+        image = plt.imread(image_path)
 
-        r, g, b = rgb_from_ndarray(image)
+        _, intermidate_values = encoder.encoder(image, return_intermidiate_values=True)
+        r, g, b = intermidate_values['red'], intermidate_values['green'], intermidate_values['blue']
 
         y, cb, cr = rgb_to_ycbcr(r, g, b)
 
-        print(y, cb, cr)
-        break
+        fig, axes = plt.subplots(2, 3, figsize=(12, 8))
+
+        axes[0, 0].imshow(r, cmap='Reds')
+        axes[0, 0].set_title('Red Channel')
+        axes[0, 0].axis('off')
+
+        axes[0, 1].imshow(g, cmap='Greens')
+        axes[0, 1].set_title('Green Channel')
+        axes[0, 1].axis('off')
+
+        axes[0, 2].imshow(b, cmap='Blues')
+        axes[0, 2].set_title('Blue Channel')
+        axes[0, 2].axis('off')
+
+        axes[1, 0].imshow(y, cmap='gray')
+        axes[1, 0].set_title('Y Channel')
+        axes[1, 0].axis('off')
+
+        axes[1, 1].imshow(cb, cmap='cool')
+        axes[1, 1].set_title('Cb Channel')
+        axes[1, 1].axis('off')
+
+        axes[1, 2].imshow(cr, cmap='hot')
+        axes[1, 2].set_title('Cr Channel')
+        axes[1, 2].axis('off')
+
+        plt.tight_layout()
+        plt.show()
+
+        image_save_path = generate_path(image_path, 'color-space-conversion', output_dir=DOCS_DIR)
+        fig.savefig(image_save_path,bbox_inches='tight', dpi=150)
+        print(f'Saved image: {image_save_path}')
 
 if __name__ == "__main__":
     main()
