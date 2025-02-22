@@ -1,15 +1,12 @@
+from common import IMAGES, QUALITIES
 from sys import stderr
 import ffmpeg
-import os
 import itertools
-
-from common import IMAGES
-
-QUALITIES = (75, 50, 25)
+import os
 
 def compress_image(image_path: str, build_dir: str, quality: int) -> tuple[str, float]:
     """
-    Compress bmp image to jpeg in the given build_dir and quality
+    Compress bmp image to jpeg in the given build_dir with the given quality
 
 
     Parameters
@@ -20,13 +17,13 @@ def compress_image(image_path: str, build_dir: str, quality: int) -> tuple[str, 
     build_dir : str
         The directory to build compressed image to.
 
-    quality : int
-        The original bmp file path
+    quality : int [1-100]
+        The quality of jpeg compression.
 
     Returns
     -------
-    float
-        The compression ratio
+    tuple[str, float]
+        The tuple containing the compressed image path and the compression ratio
     """
     assert 0 <= quality <= 100, f'The quality must be between 0 and 100. Provided: {quality}'
 
