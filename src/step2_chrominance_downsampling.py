@@ -1,16 +1,22 @@
-from common import DEFAULT_DOWNSAMPLE, IMAGES, VALID_DOWNSAMPLES, VALID_DOWNSAMPLES_TYPE
+from common import DEFAULT_DOWNSAMPLE, DOCS_DIR, IMAGES, VALID_DOWNSAMPLES, VALID_DOWNSAMPLES_TYPE, generate_path
+from itertools import product
 from matplotlib import pyplot as plt
-from step1_color_space_conversion import rgb_to_ycbcr, ycbcr_to_rgb
-import numpy as np
 import cv2
+import encoder
+import numpy as np
+import step1_color_space_conversion as csc
 
-def downsample_ycbcr(ycbcr_image: np.ndarray, sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE, interpolation=cv2.INTER_LINEAR):
+def downsample_ycbcr(
+        ycbcr_image: np.ndarray,
+        sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE,
+        interpolation=cv2.INTER_LINEAR
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Realiza a sub-amostragem dos canais YCbCr com diferentes formatos suportados pelo JPEG.
 
     Args:
-        image (ndarray): Imagem no espaço YCbCr.
-        sampling (str): Método de sub-amostragem, pode ser "4:2:0" ou "4:2:2".
+        ycbcr_image (ndarray): Imagem no espaço YCbCr.
+        sampling (str): Método de sub-amostragem.
         interpolation (int): Método de interpolação do OpenCV.
 
     Returns:
@@ -33,12 +39,18 @@ def downsample_ycbcr(ycbcr_image: np.ndarray, sampling: VALID_DOWNSAMPLES_TYPE =
 
     return Y, Cb_d, Cr_d
 
-def upsample_ycbcr(Y: np.ndarray, Cb_d: np.ndarray, Cr_d: np.ndarray, sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE, interpolation=cv2.INTER_LINEAR):
+def upsample_ycbcr(
+        Y: np.ndarray,
+        Cb_d: np.ndarray,
+        Cr_d: np.ndarray,
+        sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE,
+        interpolation=cv2.INTER_LINEAR
+) -> np.ndarray:
     """
     Reverte a sub-amostragem, restaurando os canais Cb e Cr ao tamanho original.
 
     Args:
-        Y (ndarray): Canal de luminância original.
+        Y (ndarray): Canal de luminância.
         Cb_d (ndarray): Canal Cb subamostrado.
         Cr_d (ndarray): Canal Cr subamostrado.
         sampling (str): Método de sub-amostragem aplicado anteriormente.
@@ -63,73 +75,83 @@ def upsample_ycbcr(Y: np.ndarray, Cb_d: np.ndarray, Cr_d: np.ndarray, sampling: 
     return cv2.merge([Y, Cb_u, Cr_u])
 
 def main():
-    for image in IMAGES:
-        print(f'Processando imagem: {image}')
+    interpolation = cv2.INTER_CUBIC
+    for sampling, image_path in product(('4:2:2', '4:2:0'), IMAGES):
+        print(f'{image_path=}, {sampling=}')
 
-        # Carregar imagem RGB
-        image_rgb = plt.imread(image)
+        image_rgb = plt.imread(image_path)
 
-        # Separar os canais RGB e converter para YCbCr
-        r, g, b = cv2.split(image_rgb)
-        y, cb, cr = rgb_to_ycbcr(r, g, b)
-        image_ycbcr = cv2.merge([y, cb, cr])
+        _, intermidiate_values = encoder.encoder(image_rgb, return_intermidiate_values=True)
 
-        # Mostrar dimensões originais
+        image_ycbcr = intermidiate_values['ycbcr']
+
         print(f"Dimensões originais: {image_ycbcr.shape}")
 
-        # Encoder - Downsampling 4:2:0
-        Y_d, Cb_d, Cr_d = downsample_ycbcr(image_ycbcr, sampling="4:2:0", interpolation=cv2.INTER_CUBIC)
+        Y, Cb, Cr = cv2.split(image_ycbcr)
+        Y_d, Cb_d, Cr_d = downsample_ycbcr(image_ycbcr, sampling=sampling, interpolation=interpolation)
 
-        # Mostrar dimensões depois da compressão
         print(f"Dimensão Y_d: {Y_d.shape}")
         print(f"Dimensão Cb_d: {Cb_d.shape}")
         print(f"Dimensão Cr_d: {Cr_d.shape}")
 
-        # Visualizar os canais subamostrados
-        plt.figure(figsize=(10, 5))
-        plt.subplot(1, 3, 1)
-        plt.imshow(Y_d, cmap="gray")
-        plt.title("Y_d downsampling")
+        fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
-        plt.subplot(1, 3, 2)
-        plt.imshow(Cb_d, cmap="gray")
-        plt.title("Cb_d downsampling")
+        axes[0, 0].imshow(Y, cmap='gray')
+        axes[0, 0].set_title('Y original')
+        axes[0, 0].axis('off')
 
-        plt.subplot(1, 3, 3)
-        plt.imshow(Cr_d, cmap="gray")
-        plt.title("Cr_d downsampling")
+        axes[0, 1].imshow(Cb, cmap='cool')
+        axes[0, 1].set_title('Cb original')
+        axes[0, 1].axis('off')
 
+        axes[0, 2].imshow(Cr, cmap='hot')
+        axes[0, 2].set_title('Cr original')
+        axes[0, 2].axis('off')
+
+        axes[1, 0].imshow(Y_d, cmap='gray')
+        axes[1, 0].set_title('Y downsampled')
+        axes[1, 0].axis('off')
+
+        axes[1, 1].imshow(Cb_d, cmap='cool')
+        axes[1, 1].set_title('Cb downsampled')
+        axes[1, 1].axis('off')
+
+        axes[1, 2].imshow(Cr_d, cmap='hot')
+        axes[1, 2].set_title('Cr downsampled')
+        axes[1, 2].axis('off')
+
+        fig.tight_layout()
         plt.show()
 
+        image_save_path = generate_path(image_path, f'downsampling-{sampling}', output_dir=DOCS_DIR)
+        fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
+        print(f'Saved image: {image_save_path}')
+
         # Decoder - Reconstrução (upsampling)
-        image_reconstructed = upsample_ycbcr(Y_d, Cb_d, Cr_d, sampling="4:2:0", interpolation=cv2.INTER_CUBIC)
+        image_reconstructed = upsample_ycbcr(Y_d, Cb_d, Cr_d, sampling=sampling, interpolation=interpolation)
 
         # Converter de volta para RGB para comparação
         y_r, cb_r, cr_r = cv2.split(image_reconstructed)
-        r, g, b = ycbcr_to_rgb(y_r, cb_r, cr_r)
-        image_rgb_reconstructed = cv2.merge([r, g, b])
-
-        image_rgb_reconstructed = np.clip(image_rgb_reconstructed, 0, 255).astype(np.uint8)
-
-        # Mostrar imagem reconstruída
-        plt.figure()
-        plt.imshow(image_rgb_reconstructed.astype(np.uint8))
-        plt.title("Imagem Reconstruída")
-        plt.show()
+        r, g, b = csc.ycbcr_to_rgb(y_r, cb_r, cr_r)
+        image_rgb_reconstructed = cv2.merge([r, g, b]).clip(0, 255).astype(np.uint8)
 
         # Comparação com a imagem original
-        plt.figure(figsize=(10, 5))
-        plt.subplot(1, 2, 1)
-        plt.imshow(image_rgb.astype(np.uint8))
-        plt.title("Imagem Original")
+        fig, axes = plt.subplots(1, 2)
 
-        plt.subplot(1, 2, 2)
-        plt.imshow(image_rgb_reconstructed.astype(np.uint8))
-        plt.title("Imagem Reconstruída")
+        axes[0].imshow(image_rgb)
+        axes[0].set_title('Imagem Original')
+        axes[0].axis('off')
 
+        axes[1].imshow(image_rgb_reconstructed)
+        axes[1].set_title('Imagem Reconstruída')
+        axes[1].axis('off')
+
+        fig.tight_layout()
         plt.show()
 
-        break  # Processa apenas a primeira imagem para teste
+        image_save_path = generate_path(image_path, f'downsampling-{sampling}-reconstruction-comparison', output_dir=DOCS_DIR)
+        fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
+        print(f'Saved image: {image_save_path}')
 
 if __name__ == "__main__":
     main()

@@ -85,3 +85,93 @@ Função: `ycbcr_to_rgb`
 ![Geometric Color Space Conversion](docs/geometric-color-space-conversion.png)
 
 ![Nature Color Space Conversion](docs/nature-color-space-conversion.png)
+
+## 6: Sub-amostragem
+
+Ficheiro: `src/step2_chrominance_downsampling.py`
+
+### 6.1: Downsampling
+
+> Crie uma função para sub-amostrar (downsampling) os canais Y, Cb, e Cr,
+> segundo as possibilidades definidas pelo codec JPEG, a qual deve devolver
+> Y_d, Cb_d e Cr_d. Utilize, para o efeito, a função cv2.resize (biblioteca
+> Computer Vision), testando diferentes métodos de interpolação (e.g., linear,
+> cúbica, etc.).
+
+Função: `downsample_ycbcr`
+
+### 6.2: Upsampling
+
+> Crie também a função para efectuar a operação inversa, i.e., upsampling.
+
+Função: `upsample_ycbcr`
+
+### 6.3: Encoder
+
+> Encoder: Obtenha e visualize os canais Y_d, Cb_d e Cr_d com downsampling
+> 4:2:0. Apresente as dimensões das matrizes correspondentes.
+
+```console
+$ python src/step2_chrominance_downsampling.py
+image_path='./images/airport.bmp', sampling='4:2:2'
+Dimensões originais: (675, 1216, 3)
+Dimensão Y_d: (675, 1216)
+Dimensão Cb_d: (675, 608)
+Dimensão Cr_d: (675, 608)
+image_path='./images/geometric.bmp', sampling='4:2:2'
+Dimensões originais: (1001, 1024, 3)
+Dimensão Y_d: (1001, 1024)
+Dimensão Cb_d: (1001, 512)
+Dimensão Cr_d: (1001, 512)
+image_path='./images/nature.bmp', sampling='4:2:2'
+Dimensões originais: (1200, 1632, 3)
+Dimensão Y_d: (1200, 1632)
+Dimensão Cb_d: (1200, 816)
+Dimensão Cr_d: (1200, 816)
+image_path='./images/airport.bmp', sampling='4:2:0'
+Dimensões originais: (675, 1216, 3)
+Dimensão Y_d: (675, 1216)
+Dimensão Cb_d: (337, 608)
+Dimensão Cr_d: (337, 608)
+image_path='./images/geometric.bmp', sampling='4:2:0'
+Dimensões originais: (1001, 1024, 3)
+Dimensão Y_d: (1001, 1024)
+Dimensão Cb_d: (500, 512)
+Dimensão Cr_d: (500, 512)
+image_path='./images/nature.bmp', sampling='4:2:0'
+Dimensões originais: (1200, 1632, 3)
+Dimensão Y_d: (1200, 1632)
+Dimensão Cb_d: (600, 816)
+Dimensão Cr_d: (600, 816)
+```
+
+### 6.4: Decoder
+
+> Decoder: Reconstrua e visualize os canais Y, Cb e Cr. Compare-os com os
+> originais.
+
+### Resultados
+
+![Airport Downsampling 4:2:0](docs/airport-downsampling-4:2:0.png)
+
+![Airport Downsampling 4:2:0 Comparison](docs/airport-downsampling-4:2:0-reconstruction-comparison.png)
+
+![Airport Downsampling 4:2:2](docs/airport-downsampling-4:2:2.png)
+
+![Airport Downsampling 4:2:2 Comparison](docs/airport-downsampling-4:2:2-reconstruction-comparison.png)
+
+![Geometric Downsampling 4:2:0](docs/geometric-downsampling-4:2:0.png)
+
+![Geometric Downsampling 4:2:0 Comparison](docs/geometric-downsampling-4:2:0-reconstruction-comparison.png)
+
+![Geometric Downsampling 4:2:2](docs/geometric-downsampling-4:2:2.png)
+
+![Geometric Downsampling 4:2:2 Comparison](docs/geometric-downsampling-4:2:2-reconstruction-comparison.png)
+
+![Nature Downsampling 4:2:0](docs/nature-downsampling-4:2:0.png)
+
+![Nature Downsampling 4:2:0 Comparison](docs/nature-downsampling-4:2:0-reconstruction-comparison.png)
+
+![Nature Downsampling 4:2:2](docs/nature-downsampling-4:2:2.png)
+
+![Nature Downsampling 4:2:2 Comparison](docs/nature-downsampling-4:2:2-reconstruction-comparison.png)

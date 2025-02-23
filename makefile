@@ -1,2 +1,2 @@
 %.pdf: %.md
-	pandoc $< --output=$@
+	pandoc --from=markdown-implicit_figures $< --output=$@
