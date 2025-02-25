@@ -7,9 +7,9 @@ import numpy as np
 import step1_color_space_conversion as csc
 
 def downsample_ycbcr(
-        ycbcr_image: np.ndarray,
-        sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE,
-        interpolation=cv2.INTER_LINEAR
+    ycbcr_image: np.ndarray,
+    sampling: VALID_DOWNSAMPLES_TYPE = DEFAULT_DOWNSAMPLE,
+    interpolation: int | None = cv2.INTER_LINEAR
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Realiza a sub-amostragem dos canais YCbCr com diferentes formatos suportados pelo JPEG.
@@ -27,6 +27,10 @@ def downsample_ycbcr(
 
     Y, Cb, Cr = cv2.split(ycbcr_image)
     h, w = Y.shape
+
+    if interpolation is None:
+        # TODO: Choose best interpolation method
+        interpolation = cv2.INTER_LINEAR
 
     if sampling == "4:2:0":
         Cb_d = cv2.resize(Cb, (w // 2, h // 2), interpolation=interpolation)

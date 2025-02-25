@@ -1,13 +1,20 @@
 import os
 from typing import Literal
+import cv2
 import numpy as np
 
 IMAGES = ('./images/airport.bmp', './images/geometric.bmp', './images/nature.bmp')
 QUALITIES = (75, 50, 25)
-TEST_IMAGE = './images/airport.bmp'
-TEST_DOWNSAMPLING = '4:2:2'
+
 BUILD_DIR = './build'
 DOCS_DIR = './docs'
+
+TEST_PARAMETERS = {
+    'IMAGE-PATH': './images/airport.bmp',
+    'INTERPOLATION': cv2.INTER_LINEAR,
+    'DOWNSAMPLING': '4:2:2',
+    'QUALITY-FACTOR': 75,
+}
 
 RGB_TO_YCBCR_MATRIX = np.array([
     [0.299, 0.587, 0.114],

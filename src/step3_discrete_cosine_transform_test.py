@@ -1,4 +1,4 @@
-from common import TEST_IMAGE
+from common import TEST_PARAMETERS
 from matplotlib import pyplot as plt
 from step1_color_space_conversion import rgb_to_ycbcr
 from step3_discrete_cosine_transform import dct_channel, idct_channel, apply_dct_to_channels, recover_channels, dct_blocks, idct_blocks
@@ -29,7 +29,7 @@ def test_dct_channel():
 
 def test_full_image_dct():
     # Carrega imagem de teste
-    img = plt.imread(TEST_IMAGE)
+    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
 
     # Converte para YCbCr
     r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
@@ -54,7 +54,7 @@ def test_full_image_dct():
 
 def test_dct_8x8():
     # Carrega a imagem de teste (por exemplo, airport.bmp)
-    img = plt.imread(TEST_IMAGE)
+    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
 
     # Converte a imagem para o espaço de cor YCbCr
     r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
@@ -87,7 +87,7 @@ def test_dct_8x8():
 
 def test_block_8x8_dct_idct():
     # Carrega a imagem de teste
-    img = plt.imread(TEST_IMAGE)
+    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
 
     # Converte para YCbCr
     r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]

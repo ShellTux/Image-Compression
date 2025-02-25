@@ -1,10 +1,10 @@
-from common import TEST_IMAGE
+from common import TEST_PARAMETERS
 from matplotlib import pyplot as plt
 from step1_color_space_conversion import rgb_from_ndarray, rgb_to_ycbcr
 import numpy as np
 
 def test_rgb_from_ndarray():
-    img = plt.imread(TEST_IMAGE)
+    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
     r, _, _ = rgb_from_ndarray(img)
     r = r[8:16, 8:16]
     expected_r = np.array([[209, 212, 210, 208, 208, 210, 210, 207],
@@ -18,7 +18,7 @@ def test_rgb_from_ndarray():
     assert np.array_equal(r, expected_r), f'\n{r}\n!=\n{expected_r}'
 
 def test_rgb_to_ycbcr():
-    img = plt.imread(TEST_IMAGE)
+    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
     r, g, b = rgb_from_ndarray(img)
     y, cb, _ = rgb_to_ycbcr(r, g, b)
 

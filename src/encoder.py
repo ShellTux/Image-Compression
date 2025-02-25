@@ -7,7 +7,13 @@ import step2_chrominance_downsampling as cd
 
 from step3_discrete_cosine_transform import apply_dct_to_channels
 
-def encoder(image: np.ndarray, *, downsampling: VALID_DOWNSAMPLES_TYPE = '4:2:0', return_intermidiate_values: bool = False) -> tuple[np.ndarray, dict[str, np.ndarray]]:
+def encoder(
+    image: np.ndarray,
+    *,
+    downsampling: VALID_DOWNSAMPLES_TYPE = '4:2:0',
+    interpolation: int | None = cv2.INTER_LINEAR,
+    return_intermidiate_values: bool = False
+) -> tuple[np.ndarray, dict[str, np.ndarray]]:
     assert downsampling in VALID_DOWNSAMPLES, f'Invalid downsampling: {downsampling}. Needs to be one of the following: {VALID_DOWNSAMPLES}'
 
     intermidiate_values: dict[str, np.ndarray] = dict()
@@ -41,7 +47,7 @@ def encoder(image: np.ndarray, *, downsampling: VALID_DOWNSAMPLES_TYPE = '4:2:0'
         intermidiate_values['ycbcr'] = ycbcr.copy()
 
     # TODO: remove or choose another interpolation method
-    Y_d, Cb_d, Cr_d = cd.downsample_ycbcr(ycbcr, sampling=downsampling, interpolation=cv2.INTER_CUBIC)
+    Y_d, Cb_d, Cr_d = cd.downsample_ycbcr(ycbcr, sampling=downsampling, interpolation=interpolation)
     if return_intermidiate_values:
         intermidiate_values['y-downsampled'] = Y_d.copy()
         intermidiate_values['cb-downsampled'] = Cb_d.copy()
