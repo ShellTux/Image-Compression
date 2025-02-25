@@ -2,6 +2,7 @@
 
 ---
 title: Relatório de Multimédia
+lang: pt-PT
 author:
   - Gonçalo José dos Santos Silva, nº 2022233004
   - Luís Pedro de Sousa Oliveira Góis, nº 2018280716
