@@ -175,3 +175,98 @@ Dimensão Cr_d: (600, 816)
 ![Nature Downsampling 4:2:2](docs/nature-downsampling-4:2:2.png)
 
 ![Nature Downsampling 4:2:2 Comparison](docs/nature-downsampling-4:2:2-reconstruction-comparison.png)
+
+## 7: Transformada de Coseno Discreta (DCT)
+
+Ficheiro: `src/step3_discrete_cosine_transform.py`
+
+### 7.1: DCT nos canais completos
+
+#### 7.1.1: DCT de um canal completo
+
+> Crie uma função para calcular a DCT de um canal completo. Utilize a função
+> scipy.fftpack.dct.
+
+Função: `dct_channel`
+
+#### 7.1.2: DCT inverso de um canal completo
+
+> Crie também a função inversa (usando scipy.fftpack.idct). Nota: para uma
+> matriz, X, com duas dimensões, deverá fazer: X_dct = dct(dct(X,
+> norm=”ortho”).T, norm=”ortho”).T
+
+Função: `idct_channel`
+
+#### 7.1.3: Encoder
+
+> Encoder: Aplique a função desenvolvida em 7.1.1 a Y_d, Cb_d, Cr_d e visualize
+> as imagens obtidas (Y_dct, Cb_dct, Cr_dct). Sugestão: atendendo à gama ampla
+> de valores da DCT, visualize as imagens usando uma transformação logarítmica
+> (apta para compressão de gama), de acordo com o seguinte pseudo-código:
+> imshow(log(abs(X) + 0.0001))
+
+Função: `apply_dct_to_channels`
+
+#### 7.1.4: Decoder
+
+> Decoder: Aplique a função inversa (7.1.2) e certifique-se de que consegue
+> obter os valores originais de Y_d, Cb_d e Cr_d.
+
+Função: `recover_channels`
+
+### 7.2: DCT em blocos 8x8
+
+#### 7.2.1: DCT em blocos
+
+> Usando as mesmas funções para cálculo da DCT, crie uma função que calcule a
+> DCT de um canal completo em blocos BSxBS.
+
+Função: `dct_blocks`
+
+#### 7.2.2: IDCT em blocos
+
+> Crie também a função inversa (IDCT BSxBS).
+
+Função: `idct_blocks`
+
+#### 7.2.3: Encoder
+
+> Encoder: Aplique a função desenvolvida (7.2.1) a Y_d, Cb_d, Cr_d com blocos
+> 8x8 e visualize as imagens obtidas (Y_dct8, Cb_dct8, Cr_dct8).
+
+#### 7.2.4: Decoder
+
+>  Decoder:  Aplique a função inversa (7.2.2) e certifique-se de que consegue
+>  obter os valores originais de Y_d, Cb_d e Cr_d.
+
+### 7.3: DCT em blocos 64x64
+
+> DCT em blocos 64x64. Repita 7.2 para blocos com dimensão 64x64.
+
+Função: `dct_blocks`
+
+### 7.4: Potencial de compressão
+
+> Compare e discuta os resultados obtidos em 7.1, 7.2 e 7.3 em termos de
+> potencial de compressão.
+
+### Resultados
+
+
+![Airport DCT nos canais completos](docs/airport-dct-logarithmic-transformation.png)
+
+![Airport DCT blocos 8x8](docs/airport-dct-blocks-8x8.png)
+
+![Airport DCT blocos 64x64](docs/airport-dct-blocks-64x64.png)
+
+![Geometric DCT nos canais completos](docs/geometric-dct-logarithmic-transformation.png)
+
+![Geometric DCT blocos 8x8](docs/geometric-dct-blocks-8x8.png)
+
+![Geometric DCT blocos 64x64](docs/geometric-dct-blocks-64x64.png)
+
+![Nature DCT nos canais completos](docs/nature-dct-logarithmic-transformation.png)
+
+![Nature DCT blocos 8x8](docs/nature-dct-blocks-8x8.png)
+
+![Nature DCT blocos 64x64](docs/nature-dct-blocks-64x64.png)

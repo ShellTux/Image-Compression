@@ -1,6 +1,5 @@
-import numpy as np
-
 from step0_preprocessing import padding
+import numpy as np
 
 def test_padding():
     a = np.array([
