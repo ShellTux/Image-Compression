@@ -5,7 +5,7 @@ import step0_preprocessing as prep
 import step1_color_space_conversion as csc
 import step2_chrominance_downsampling as cd
 
-from step3_discrete_cosine_transform import apply_dct_to_channels
+from step3_discrete_cosine_transform import apply_dct_to_channels, dct_blocks
 
 def encoder(
     image: np.ndarray,
@@ -58,5 +58,11 @@ def encoder(
         intermidiate_values['y-dct'] = Y_dct.copy()
         intermidiate_values['cb-dct'] = Cb_dct.copy()
         intermidiate_values['cr-dct'] = Cr_dct.copy()
+
+    Y_dct8, Cb_dct8, Cr_dct8 = dct_blocks(Y_d), dct_blocks(Cb_d), dct_blocks(Cr_d)
+    if return_intermidiate_values:
+        intermidiate_values['y-dct8'] = Y_dct8.copy()
+        intermidiate_values['cb-dct8'] = Cb_dct8.copy()
+        intermidiate_values['cr-dct8'] = Cr_dct8.copy()
 
     return np.zeros(1), intermidiate_values
