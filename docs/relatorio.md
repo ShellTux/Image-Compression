@@ -301,9 +301,9 @@ Função: `iquantization`
 
 ### 8.5: Compare os resultados
 
-> 8.5.  Compare os resultados obtidos com os vários factores de qualidade e discuta-os
+> 8.5. Compare os resultados obtidos com os vários factores de qualidade e discuta-os
 > em termos de potencial de compressão.
 
 ### 8.6: Compare os resultados
 
-> 8.6.  Compare os resultados obtidos com os da alínea 7 (DCT) e tire conclusões.
+> 8.6. Compare os resultados obtidos com os da alínea 7 (DCT) e tire conclusões.
