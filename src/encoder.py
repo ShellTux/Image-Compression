@@ -69,9 +69,9 @@ def encoder(
         intermidiate_values['cb-dct8'] = Cb_dct8.copy()
         intermidiate_values['cr-dct8'] = Cr_dct8.copy()
 
-    Y_q = quantization(Y_dct, quality_factor=quality_factor, block_size=block_size)
-    CB_q = quantization(Cb_dct, quality_factor=quality_factor, block_size=block_size)
-    Cr_q = quantization(Cr_dct, quality_factor=quality_factor, block_size=block_size)
+    Y_q = quantization(Y_dct8, quality_factor=quality_factor, block_size=block_size)
+    CB_q = quantization(Cb_dct8, quality_factor=quality_factor, block_size=block_size)
+    Cr_q = quantization(Cr_dct8, quality_factor=quality_factor, block_size=block_size)
     if return_intermidiate_values:
         intermidiate_values['y-q'] = Y_q.copy()
         intermidiate_values['cb-q'] = CB_q.copy()

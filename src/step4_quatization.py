@@ -98,9 +98,9 @@ def main():
         Y_dct8, Cb_dct8, Cr_dct8 = intermidiate_values['y-dct8'], intermidiate_values['cb-dct8'], intermidiate_values['cr-dct8']
 
         for quality_factor in (100,):
-            Y_q = quantization(Y_dct8, quality_factor=quality_factor)
-            Cb_q = quantization(Cb_dct8, quality_factor=quality_factor)
-            Cr_q = quantization(Cr_dct8, quality_factor=quality_factor)
+            Y_q = quantization(Y_dct8, quality_factor=quality_factor)[::8, ::8]
+            Cb_q = quantization(Cb_dct8, quality_factor=quality_factor)[::8, ::8]
+            Cr_q = quantization(Cr_dct8, quality_factor=quality_factor)[::8, ::8]
 
             fig, axis = plt.subplots(1, 3, figsize=(15, 5))
 
