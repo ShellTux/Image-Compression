@@ -24,15 +24,16 @@ def encoder(
     if return_intermidiate_values:
         intermidiate_values['image'] = image.copy()
 
-    r_padded, g_padded, b_padded = csc.rgb_from_ndarray(image)
+    r, g, b = csc.rgb_from_ndarray(image)
     if return_intermidiate_values:
-        intermidiate_values['red'] = r_padded.copy()
-        intermidiate_values['green'] = g_padded.copy()
-        intermidiate_values['blue'] = b_padded.copy()
+        intermidiate_values['red'] = r.copy()
+        intermidiate_values['green'] = g.copy()
+        intermidiate_values['blue'] = b.copy()
 
-    r_padded = prep.preprocessing(r_padded)
-    g_padded = prep.preprocessing(g_padded)
-    b_padded = prep.preprocessing(b_padded)
+    r_padded = prep.preprocessing(r)
+    g_padded = prep.preprocessing(g)
+    b_padded = prep.preprocessing(b)
+
 
     image_padded = cv2.merge([r_padded, g_padded, b_padded])
     if return_intermidiate_values:

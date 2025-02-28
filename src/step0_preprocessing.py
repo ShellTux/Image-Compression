@@ -2,13 +2,12 @@ from common import DOCS_DIR, IMAGES, generate_path
 from matplotlib import pyplot as plt
 import encoder
 import numpy as np
-import os
 
 def preprocessing(img: np.ndarray) -> np.ndarray:
     img = padding(img, (32, 32))
     return img
 
-def padding(img: np.ndarray, size: tuple) -> np.ndarray:
+def padding(img: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     """
     Pads an image with zeros to a specified size.
 
@@ -28,10 +27,19 @@ def padding(img: np.ndarray, size: tuple) -> np.ndarray:
         raise TypeError("img must be a numpy ndarray")
     if not isinstance(size, tuple):
         raise TypeError("size must be a tuple")
+    if len(size) != 2:
+        raise ValueError("size must have two elements")
 
-    padded_needed = size - (np.array(img.shape) % size)
+    mod = np.array(size)
+    pad_needed = mod - (img.shape % mod)
+    pad_needed = (
+        (0, pad_needed[0]),
+        (0, pad_needed[1]),
+    )
 
-    return np.pad(img, (0, padded_needed[1]), mode='edge')[:img.shape[0]]
+    padded_img = np.pad(img, pad_needed, mode='edge')
+
+    return padded_img
 
 def main():
     for image_path in IMAGES:
