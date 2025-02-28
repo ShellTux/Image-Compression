@@ -272,3 +272,38 @@ Função: `dct_blocks`
 ![Nature DCT blocos 8x8](docs/nature-dct-blocks-8x8.png)
 
 ![Nature DCT blocos 64x64](docs/nature-dct-blocks-64x64.png)
+
+## 8: Quantização
+
+Ficheiro: `src/step4_quatization.py`
+
+### 8.1: Quantização dos coeficientes
+
+> 8.1. Crie uma função para quantizar os coeficientes da DCT para cada bloco 8x8.
+
+Função: `quantization`
+
+### 8.2: Inversa quantização
+
+> 8.2. Crie também a função inversa.
+
+Função: `iquantization`
+
+### 8.3: Encoder
+
+> 8.3. Encoder: Quantize os coeficientes da DCT, usando os seguintes factores de qualidade:
+> 10, 25, 50, 75 e 100. Visualize as imagens obtidas (Y_q, CB_q e Cr_q).
+
+### 8.4: Decoder
+
+> 8.4. Decoder: Desquantize os coeficientes da DCT, usando os mesmos factores de
+> qualidade. Visualize as imagens obtidas.
+
+### 8.5: Compare os resultados
+
+> 8.5.  Compare os resultados obtidos com os vários factores de qualidade e discuta-os
+> em termos de potencial de compressão.
+
+### 8.6: Compare os resultados
+
+> 8.6.  Compare os resultados obtidos com os da alínea 7 (DCT) e tire conclusões.

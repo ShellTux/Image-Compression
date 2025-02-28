@@ -6,13 +6,16 @@ import step1_color_space_conversion as csc
 import step2_chrominance_downsampling as cd
 
 from step3_discrete_cosine_transform import apply_dct_to_channels, dct_blocks
+from step4_quatization import quantization
 
 def encoder(
     image: np.ndarray,
     *,
     downsampling: VALID_DOWNSAMPLES_TYPE = '4:2:0',
     interpolation: int | None = cv2.INTER_LINEAR,
-    return_intermidiate_values: bool = False
+    quality_factor: int = 100,
+    block_size: int = 8,
+    return_intermidiate_values: bool = False,
 ) -> tuple[np.ndarray, dict[str, np.ndarray]]:
     assert downsampling in VALID_DOWNSAMPLES, f'Invalid downsampling: {downsampling}. Needs to be one of the following: {VALID_DOWNSAMPLES}'
 
@@ -64,5 +67,13 @@ def encoder(
         intermidiate_values['y-dct8'] = Y_dct8.copy()
         intermidiate_values['cb-dct8'] = Cb_dct8.copy()
         intermidiate_values['cr-dct8'] = Cr_dct8.copy()
+
+    Y_q = quantization(Y_dct, quality_factor=quality_factor, block_size=block_size)
+    CB_q = quantization(Cb_dct, quality_factor=quality_factor, block_size=block_size)
+    Cr_q = quantization(Cr_dct, quality_factor=quality_factor, block_size=block_size)
+    if return_intermidiate_values:
+        intermidiate_values['y-q'] = Y_q.copy()
+        intermidiate_values['cb-q'] = CB_q.copy()
+        intermidiate_values['cr-q'] = Cr_q.copy()
 
     return np.zeros(1), intermidiate_values
