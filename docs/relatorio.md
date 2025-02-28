@@ -6,7 +6,7 @@ lang: pt-PT
 author:
   - Gonçalo José dos Santos Silva, nº 2022233004
   - Luís Pedro de Sousa Oliveira Góis, nº 2018280716
-  - Pedro
+  - Pedro Francisco Madureira Garcia Teixeira, nº 2017261525
   - Renato Marques Reis, nº 2022232936
 date: \today
 ---
