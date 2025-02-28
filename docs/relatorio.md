@@ -7,7 +7,7 @@ toc: true
 author:
   - Gonçalo José dos Santos Silva, nº 2022233004
   - Luís Pedro de Sousa Oliveira Góis, nº 2018280716
-  - Pedro
+  - Pedro Francisco Madureira Garcia Teixeira, nº 2017261525
   - Renato Marques Reis, nº 2022232936
 date: \today
 ---
@@ -111,7 +111,7 @@ Função: `upsample_ycbcr`
 ### 6.3: Encoder
 
 > Encoder: Obtenha e visualize os canais Y_d, Cb_d e Cr_d com downsampling
-> 4:2:0. Apresente as dimensões das matrizes correspondentes.
+> 4:2:2 e 4:2:0. Apresente as dimensões das matrizes correspondentes.
 
 ```console
 $ python src/step2_chrominance_downsampling.py
