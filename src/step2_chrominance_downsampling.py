@@ -127,7 +127,7 @@ def main():
         fig.tight_layout()
         plt.show()
 
-        image_save_path = generate_path(image_path, f'downsampling-{sampling}', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, f'downsampling-{sampling.replace(":", "")}', output_dir=DOCS_DIR)
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
         print(f'Saved image: {image_save_path}')
 
@@ -153,7 +153,7 @@ def main():
         fig.tight_layout()
         plt.show()
 
-        image_save_path = generate_path(image_path, f'downsampling-{sampling}-reconstruction-comparison', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, f'downsampling-{sampling.replace(":", "")}-reconstruction-comparison', output_dir=DOCS_DIR)
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
         print(f'Saved image: {image_save_path}')
 
