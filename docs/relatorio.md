@@ -154,29 +154,29 @@ Dimensão Cr_d: (600, 816)
 
 ### Resultados
 
-![Airport Downsampling 4:2:0](docs/airport-downsampling-4:2:0.png)
+![Airport Downsampling 4:2:0](docs/airport-downsampling-420.png)
 
-![Airport Downsampling 4:2:0 Comparison](docs/airport-downsampling-4:2:0-reconstruction-comparison.png)
+![Airport Downsampling 4:2:0 Comparison](docs/airport-downsampling-420-reconstruction-comparison.png)
 
-![Airport Downsampling 4:2:2](docs/airport-downsampling-4:2:2.png)
+![Airport Downsampling 4:2:2](docs/airport-downsampling-422.png)
 
-![Airport Downsampling 4:2:2 Comparison](docs/airport-downsampling-4:2:2-reconstruction-comparison.png)
+![Airport Downsampling 4:2:2 Comparison](docs/airport-downsampling-422-reconstruction-comparison.png)
 
-![Geometric Downsampling 4:2:0](docs/geometric-downsampling-4:2:0.png)
+![Geometric Downsampling 4:2:0](docs/geometric-downsampling-420.png)
 
-![Geometric Downsampling 4:2:0 Comparison](docs/geometric-downsampling-4:2:0-reconstruction-comparison.png)
+![Geometric Downsampling 4:2:0 Comparison](docs/geometric-downsampling-420-reconstruction-comparison.png)
 
-![Geometric Downsampling 4:2:2](docs/geometric-downsampling-4:2:2.png)
+![Geometric Downsampling 4:2:2](docs/geometric-downsampling-422.png)
 
-![Geometric Downsampling 4:2:2 Comparison](docs/geometric-downsampling-4:2:2-reconstruction-comparison.png)
+![Geometric Downsampling 4:2:2 Comparison](docs/geometric-downsampling-422-reconstruction-comparison.png)
 
-![Nature Downsampling 4:2:0](docs/nature-downsampling-4:2:0.png)
+![Nature Downsampling 4:2:0](docs/nature-downsampling-420.png)
 
-![Nature Downsampling 4:2:0 Comparison](docs/nature-downsampling-4:2:0-reconstruction-comparison.png)
+![Nature Downsampling 4:2:0 Comparison](docs/nature-downsampling-420-reconstruction-comparison.png)
 
-![Nature Downsampling 4:2:2](docs/nature-downsampling-4:2:2.png)
+![Nature Downsampling 4:2:2](docs/nature-downsampling-422.png)
 
-![Nature Downsampling 4:2:2 Comparison](docs/nature-downsampling-4:2:2-reconstruction-comparison.png)
+![Nature Downsampling 4:2:2 Comparison](docs/nature-downsampling-422-reconstruction-comparison.png)
 
 ## 7: Transformada de Coseno Discreta (DCT)
 
