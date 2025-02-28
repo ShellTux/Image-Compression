@@ -93,7 +93,7 @@ def main():
         print(f'{image_path=}')
         img = plt.imread(image_path)
 
-        _, intermidiate_values = encoder.encoder(img, return_intermidiate_values=True)
+        _, intermidiate_values = encoder.encoder(img, downsampling='4:2:2', return_intermidiate_values=True)
 
         Y_dct8, Cb_dct8, Cr_dct8 = intermidiate_values['y-dct8'], intermidiate_values['cb-dct8'], intermidiate_values['cr-dct8']
 
