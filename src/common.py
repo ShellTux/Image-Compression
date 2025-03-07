@@ -2,6 +2,7 @@ import os
 from typing import Literal
 import cv2
 import numpy as np
+import matplotlib.colors as clr
 
 IMAGES = ('./images/airport.bmp', './images/geometric.bmp', './images/nature.bmp')
 QUALITIES = (75, 50, 25)
@@ -15,6 +16,11 @@ TEST_PARAMETERS = {
     'DOWNSAMPLING': '4:2:2',
     'QUALITY-FACTOR': 75,
 }
+
+cmRed = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(1,0,0)], N = 256)
+cmGreen = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,1,0)], N = 256)
+cmBlue = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,0,1)], N = 256)
+cmGray = clr.LinearSegmentedColormap.from_list("gray", [(0,0,0),(1,1,1)], N = 256)
 
 RGB_TO_YCBCR_MATRIX = np.array([
     [0.299, 0.587, 0.114],

@@ -1,4 +1,4 @@
-from common import DOCS_DIR, IMAGES, generate_path
+from common import DOCS_DIR, IMAGES, cmGray, generate_path
 from itertools import product
 from matplotlib import pyplot as plt
 from scipy.fftpack import dct, idct
@@ -79,15 +79,15 @@ def visualize_dct_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.nda
     Cb_log = np.log(np.abs(Cb_dct) + 0.0001)
     Cr_log = np.log(np.abs(Cr_dct) + 0.0001)
 
-    ax1.imshow(Y_log, cmap='gray')
+    ax1.imshow(Y_log, cmGray)
     ax1.set_title('Y DCT')
     ax1.axis('off')
 
-    ax2.imshow(Cb_log, cmap='gray')
+    ax2.imshow(Cb_log, cmGray)
     ax2.set_title('Cb DCT')
     ax2.axis('off')
 
-    ax3.imshow(Cr_log, cmap='gray')
+    ax3.imshow(Cr_log, cmGray)
     ax3.set_title('Cr DCT')
     ax3.axis('off')
 

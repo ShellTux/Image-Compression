@@ -1,4 +1,4 @@
-from common import DOCS_DIR, IMAGES, RGB_TO_YCBCR_MATRIX, RGB_TO_YCBCR_OFFSET, YCBCR_TO_RGB_MATRIX, generate_path
+from common import DOCS_DIR, IMAGES, cmRed, cmBlue, cmGray, cmGreen, RGB_TO_YCBCR_MATRIX, RGB_TO_YCBCR_OFFSET, YCBCR_TO_RGB_MATRIX, generate_path
 import encoder
 import matplotlib.pyplot as plt
 import numpy as np
@@ -64,27 +64,27 @@ def main():
 
         fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
-        axes[0, 0].imshow(r, cmap='Reds')
+        axes[0, 0].imshow(r, cmRed)
         axes[0, 0].set_title('Red Channel')
         axes[0, 0].axis('off')
 
-        axes[0, 1].imshow(g, cmap='Greens')
+        axes[0, 1].imshow(g, cmGreen)
         axes[0, 1].set_title('Green Channel')
         axes[0, 1].axis('off')
 
-        axes[0, 2].imshow(b, cmap='Blues')
+        axes[0, 2].imshow(b, cmBlue)
         axes[0, 2].set_title('Blue Channel')
         axes[0, 2].axis('off')
 
-        axes[1, 0].imshow(y, cmap='gray')
+        axes[1, 0].imshow(y, cmGray)
         axes[1, 0].set_title('Y Channel')
         axes[1, 0].axis('off')
 
-        axes[1, 1].imshow(cb, cmap='cool')
+        axes[1, 1].imshow(cb, cmBlue)
         axes[1, 1].set_title('Cb Channel')
         axes[1, 1].axis('off')
 
-        axes[1, 2].imshow(cr, cmap='hot')
+        axes[1, 2].imshow(cr, cmRed)
         axes[1, 2].set_title('Cr Channel')
         axes[1, 2].axis('off')
 

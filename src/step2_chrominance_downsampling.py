@@ -100,27 +100,27 @@ def main():
 
         fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
-        axes[0, 0].imshow(Y, cmap='gray')
+        axes[0, 0].imshow(Y, cmGray)
         axes[0, 0].set_title('Y original')
         axes[0, 0].axis('off')
 
-        axes[0, 1].imshow(Cb, cmap='cool')
+        axes[0, 1].imshow(Cb, cmBlue)
         axes[0, 1].set_title('Cb original')
         axes[0, 1].axis('off')
 
-        axes[0, 2].imshow(Cr, cmap='hot')
+        axes[0, 2].imshow(Cr, cmRed)
         axes[0, 2].set_title('Cr original')
         axes[0, 2].axis('off')
 
-        axes[1, 0].imshow(Y_d, cmap='gray')
+        axes[1, 0].imshow(Y_d, cmGray)
         axes[1, 0].set_title('Y downsampled')
         axes[1, 0].axis('off')
 
-        axes[1, 1].imshow(Cb_d, cmap='cool')
+        axes[1, 1].imshow(Cb_d, cmBlue)
         axes[1, 1].set_title('Cb downsampled')
         axes[1, 1].axis('off')
 
-        axes[1, 2].imshow(Cr_d, cmap='hot')
+        axes[1, 2].imshow(Cr_d, cmRed)
         axes[1, 2].set_title('Cr downsampled')
         axes[1, 2].axis('off')
 
