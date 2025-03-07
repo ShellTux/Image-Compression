@@ -91,6 +91,21 @@ pytest
 - `README.md`: The file you are currently reading.
 - `requirements.txt`: List of required packages for the project.
 
+## Generating report
+
+All available tools for compiling the report pdf are declared through nix
+flakes. To manually activate it, run:
+
+```sh
+nix develop
+```
+
+To compile the report
+
+```sh
+make docs/relatorio.pdf
+```
+
 ## License
 
 This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) file for more information.
