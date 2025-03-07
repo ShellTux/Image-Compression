@@ -100,6 +100,12 @@ flakes. To manually activate it, run:
 nix develop
 ```
 
+For example to activate the nix flake profile named `pedro`:
+
+```sh
+nix develop .#pedro
+```
+
 To compile the report
 
 ```sh
