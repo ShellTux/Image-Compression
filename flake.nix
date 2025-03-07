@@ -29,6 +29,7 @@
                 pkgs.gnumake
                 pkgs.imv
                 pkgs.pandoc
+                pkgs.pandoc-include
                 pkgs.qiv
                 pkgs.texliveFull
             ];

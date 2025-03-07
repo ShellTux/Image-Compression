@@ -1,4 +1,4 @@
-# Multimédia
+# Compressão de Imagem: JPEG Codec
 
 ---
 title: Relatório de Multimédia
@@ -10,6 +10,11 @@ author:
   - Pedro Francisco Madureira Garcia Teixeira, nº 2017261525
   - Renato Marques Reis, nº 2022232936
 date: \today
+header-includes: |
+    \usepackage{float}
+    \makeatletter
+    \def\fps@figure{H}
+    \makeatother
 ---
 
 <!-- TODO: Depois de terminar o relatório, adicionar code snippets.-->
