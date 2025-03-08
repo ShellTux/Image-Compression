@@ -7,6 +7,7 @@ import step2_chrominance_downsampling as cd
 
 from step3_discrete_cosine_transform import apply_dct_to_channels, dct_blocks
 from step4_quatization import quantization
+from step5_dpcm import dpcm_encode
 
 def encoder(
     image: np.ndarray,
@@ -16,13 +17,14 @@ def encoder(
     quality_factor: int = 100,
     block_size: int = 8,
     return_intermidiate_values: bool = False,
-) -> tuple[np.ndarray, dict[str, np.ndarray]]:
+) -> tuple[dict, dict[str, np.ndarray]]:
     assert downsampling in VALID_DOWNSAMPLES, f'Invalid downsampling: {downsampling}. Needs to be one of the following: {VALID_DOWNSAMPLES}'
 
     intermidiate_values: dict[str, np.ndarray] = dict()
 
     if return_intermidiate_values:
         intermidiate_values['image'] = image.copy()
+        intermidiate_values['original_shape'] = image.shape
 
     r, g, b = csc.rgb_from_ndarray(image)
     if return_intermidiate_values:
@@ -70,11 +72,31 @@ def encoder(
         intermidiate_values['cr-dct8'] = Cr_dct8.copy()
 
     Y_q = quantization(Y_dct8, quality_factor=quality_factor, block_size=block_size)
-    CB_q = quantization(Cb_dct8, quality_factor=quality_factor, block_size=block_size)
+    Cb_q = quantization(Cb_dct8, quality_factor=quality_factor, block_size=block_size)
     Cr_q = quantization(Cr_dct8, quality_factor=quality_factor, block_size=block_size)
     if return_intermidiate_values:
         intermidiate_values['y-q'] = Y_q.copy()
-        intermidiate_values['cb-q'] = CB_q.copy()
+        intermidiate_values['cb-q'] = Cb_q.copy()
         intermidiate_values['cr-q'] = Cr_q.copy()
+    
+    # Aplicar DPCM nos coeficientes DC
+    Y_dpcm = dpcm_encode(Y_q, block_size=block_size)
+    Cb_dpcm = dpcm_encode(Cb_q, block_size=block_size)
+    Cr_dpcm = dpcm_encode(Cr_q, block_size=block_size)
+    if return_intermidiate_values:
+        intermidiate_values['y-dpcm'] = Y_dpcm.copy()
+        intermidiate_values['cb-dpcm'] = Cb_dpcm.copy()
+        intermidiate_values['cr-dpcm'] = Cr_dpcm.copy()
 
-    return np.zeros(1), intermidiate_values
+    # Criar o dicionário de dados codificados
+    encoded_data = {
+        'y-q': Y_dpcm,
+        'cb-q': Cb_dpcm,
+        'cr-q': Cr_dpcm,
+        'quality_factor': quality_factor,
+        'downsampling': downsampling,
+        'block_size': block_size,
+        'original_shape': image.shape
+    }
+
+    return encoded_data, intermidiate_values
