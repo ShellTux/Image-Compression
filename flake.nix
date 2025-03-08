@@ -6,52 +6,49 @@
   outputs = { self, nixpkgs }:
     let
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
+      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f rec {
         pkgs = import nixpkgs { inherit system; };
+        python = pkgs.python312.withPackages (pp: [
+          pp.ipython
+          pp.matplotlib
+          pp.numpy
+          pp.opencv-python
+          pp.scipy
+        ]);
+        pythonPackages = pkgs.python312Packages;
       });
     in
     {
-      devShells = forEachSupportedSystem ({ pkgs }: {
+      devShells = forEachSupportedSystem ({ pkgs, python, pythonPackages }: {
         default = pkgs.mkShell {
           venvDir = ".venv";
-          packages = with pkgs; [ python311 ] ++
-            (with pkgs.python311Packages; [
-              bpython
-              matplotlib
-              numpy
-              opencv-python
-              pip
-              scipy
-              venvShellHook
-            ])
-            ++ [
-                pkgs.ffmpeg
-                pkgs.gnumake
-                pkgs.imv
-                pkgs.pandoc
-                pkgs.pandoc-include
-                pkgs.qiv
-                pkgs.texliveFull
-            ];
+          packages = [
+            python
+            pythonPackages.bpython
+            pythonPackages.pip
+            pythonPackages.venvShellHook
+            pkgs.ffmpeg
+            pkgs.gnumake
+            pkgs.imv
+            pkgs.pandoc
+            pkgs.pandoc-include
+            pkgs.qiv
+            pkgs.texliveFull
+          ];
         };
 
         pedro = pkgs.mkShell {
           venvDir = ".venv";
-          packages = with pkgs; [ python311 ] ++
-            (with pkgs.python311Packages; [
-              matplotlib
-              numpy
-              opencv-python
-              pip
-              scipy
-              venvShellHook
-            ])
-            ++ [
-                pkgs.ffmpeg
-                pkgs.gnumake
-                pkgs.pandoc
-                pkgs.texliveFull
-            ];
+          packages = [
+            python
+            pythonPackages.pip
+            pythonPackages.venvShellHook
+            pkgs.ffmpeg
+            pkgs.gnumake
+            pkgs.pandoc
+            pkgs.pandoc-include
+            pkgs.texliveFull
+          ];
         };
       });
     };
