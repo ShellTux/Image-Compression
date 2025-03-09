@@ -1,5 +1,7 @@
 from common import DOCS_DIR, IMAGES, generate_path
 from matplotlib import pyplot as plt
+import argparse
+import cv2
 import encoder
 import numpy as np
 
@@ -42,13 +44,24 @@ def padding(img: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     return padded_img
 
 def main():
+    parser = argparse.ArgumentParser(description="Preprocessing")
+
+    parser.add_argument('--hide-figures', action='store_true', help='Disable matplotlib figures')
+
+    args = parser.parse_args()
+
+    show_figures: bool = not args.hide_figures
+
     for image_path in IMAGES:
         print(f'{image_path=}')
 
         image = plt.imread(image_path)
 
         _, intermidiate_values = encoder.encoder(image, return_intermidiate_values=True)
-        image_padded = intermidiate_values['image-padded']
+        r, g, b = intermidiate_values.red, intermidiate_values.green, intermidiate_values.blue
+
+        r_p, g_p, b_p = preprocessing(r), preprocessing(g), preprocessing(b)
+        image_padded = cv2.merge([r_p, g_p, b_p])
 
         print(f'{image_path} size        = {image.shape}')
         print(f'{image_path} padded size = {image_padded.shape}')
@@ -64,7 +77,8 @@ def main():
         axes[1].axis('off')
 
         plt.tight_layout()
-        plt.show()
+        if show_figures:
+            plt.show()
 
         image_save_path = generate_path(image_path, 'padding', output_dir=DOCS_DIR)
         fig.savefig(image_save_path,bbox_inches='tight', dpi=150)

@@ -1,10 +1,12 @@
-from common import DEFAULT_DOWNSAMPLE, DOCS_DIR, IMAGES, VALID_DOWNSAMPLES, VALID_DOWNSAMPLES_TYPE, generate_path
+from common import DEFAULT_DOWNSAMPLE, DOCS_DIR, IMAGES, VALID_DOWNSAMPLES, VALID_DOWNSAMPLES_TYPE, generate_path, custom_cmap
 from itertools import product
 from matplotlib import pyplot as plt
+import argparse
 import cv2
 import encoder
 import numpy as np
-import step1_color_space_conversion as csc
+
+from step1_color_space_conversion import ycbcr_to_rgb
 
 def downsample_ycbcr(
     ycbcr_image: np.ndarray,
@@ -79,15 +81,28 @@ def upsample_ycbcr(
     return cv2.merge([Y, Cb_u, Cr_u])
 
 def main():
+    parser = argparse.ArgumentParser(description="Chrominance Downsampling")
+
+    parser.add_argument('--hide-figures', action='store_true', help='Disable matplotlib figures')
+
+    args = parser.parse_args()
+
+    show_figures: bool = not args.hide_figures
+
     interpolation = cv2.INTER_CUBIC
+
     for sampling, image_path in product(('4:2:2', '4:2:0'), IMAGES):
         print(f'{image_path=}, {sampling=}')
 
         image_rgb = plt.imread(image_path)
 
-        _, intermidiate_values = encoder.encoder(image_rgb, return_intermidiate_values=True)
+        _, intermidiate_values = encoder.encoder(
+            image_rgb,
+            downsampling=sampling,
+            return_intermidiate_values=True
+        )
 
-        image_ycbcr = intermidiate_values['ycbcr']
+        image_ycbcr = intermidiate_values.YCbCr
 
         print(f"Dimensões originais: {image_ycbcr.shape}")
 
@@ -100,32 +115,33 @@ def main():
 
         fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
-        axes[0, 0].imshow(Y, cmGray)
+        axes[0, 0].imshow(Y, custom_cmap.gray)
         axes[0, 0].set_title('Y original')
         axes[0, 0].axis('off')
 
-        axes[0, 1].imshow(Cb, cmBlue)
+        axes[0, 1].imshow(Cb, custom_cmap.blue)
         axes[0, 1].set_title('Cb original')
         axes[0, 1].axis('off')
 
-        axes[0, 2].imshow(Cr, cmRed)
+        axes[0, 2].imshow(Cr, custom_cmap.red)
         axes[0, 2].set_title('Cr original')
         axes[0, 2].axis('off')
 
-        axes[1, 0].imshow(Y_d, cmGray)
-        axes[1, 0].set_title('Y downsampled')
+        axes[1, 0].imshow(Y_d, custom_cmap.gray)
+        axes[1, 0].set_title(f'Y downsampled {sampling}')
         axes[1, 0].axis('off')
 
-        axes[1, 1].imshow(Cb_d, cmBlue)
-        axes[1, 1].set_title('Cb downsampled')
+        axes[1, 1].imshow(Cb_d, custom_cmap.blue)
+        axes[1, 1].set_title(f'Cb downsampled {sampling}')
         axes[1, 1].axis('off')
 
-        axes[1, 2].imshow(Cr_d, cmRed)
-        axes[1, 2].set_title('Cr downsampled')
+        axes[1, 2].imshow(Cr_d, custom_cmap.red)
+        axes[1, 2].set_title(f'Cr downsampled {sampling}')
         axes[1, 2].axis('off')
 
         fig.tight_layout()
-        plt.show()
+        if show_figures:
+            plt.show()
 
         image_save_path = generate_path(image_path, f'downsampling-{sampling.replace(":", "")}', output_dir=DOCS_DIR)
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
@@ -136,7 +152,7 @@ def main():
 
         # Converter de volta para RGB para comparação
         y_r, cb_r, cr_r = cv2.split(image_reconstructed)
-        r, g, b = csc.ycbcr_to_rgb(y_r, cb_r, cr_r)
+        r, g, b = ycbcr_to_rgb(y_r, cb_r, cr_r)
         image_rgb_reconstructed = cv2.merge([r, g, b]).clip(0, 255).astype(np.uint8)
 
         # Comparação com a imagem original
@@ -151,7 +167,8 @@ def main():
         axes[1].axis('off')
 
         fig.tight_layout()
-        plt.show()
+        if show_figures:
+            plt.show()
 
         image_save_path = generate_path(image_path, f'downsampling-{sampling.replace(":", "")}-reconstruction-comparison', output_dir=DOCS_DIR)
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)

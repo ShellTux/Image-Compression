@@ -1,7 +1,6 @@
-import numpy as np
-
 from common import TEST_PARAMETERS
 from step4_quatization import get_quantization_matrix, iquantization, quantization
+import numpy as np
 
 def test_quantization():
     Yb_DCT8x8 = np.array([
@@ -26,7 +25,7 @@ def test_quantization():
         [36, 46, 48, 49, 56, 50, 52, 50],
     ])
 
-    QY_actual = get_quantization_matrix(TEST_PARAMETERS['QUALITY-FACTOR'])
+    QY_actual = get_quantization_matrix(TEST_PARAMETERS.quality_factor)
 
     assert np.array_equal(QY, QY_actual), f'\n{QY}\n!=\n{QY_actual}'
 
@@ -41,7 +40,7 @@ def test_quantization():
         [  0,   0,   0,   0,   0,   0,   0,   0],
     ])
 
-    Yb_Q_actual = quantization(Yb_DCT8x8, quality_factor=TEST_PARAMETERS['QUALITY-FACTOR'])
+    Yb_Q_actual = quantization(Yb_DCT8x8, quality_factor=TEST_PARAMETERS.quality_factor)
 
     assert np.array_equal(Yb_Q, Yb_Q_actual), f'\n{Yb_Q}\n!=\n{Yb_Q_actual}'
 
@@ -68,6 +67,10 @@ def test_inverse_quantization():
         [  0,   0,   0,   0,   0,   0,   0,   0],
     ])
 
-    Yb_DCT8x8_actual = iquantization(Yb_Q, quality_factor=TEST_PARAMETERS['QUALITY-FACTOR'])
+    Yb_DCT8x8_actual = iquantization(Yb_Q, quality_factor=TEST_PARAMETERS.quality_factor)
+
+    delta = Yb_DCT8x8_actual - Yb_DCT8x8
+
+    print(delta)
 
     assert np.allclose(Yb_DCT8x8, Yb_DCT8x8_actual, rtol=1e-5), f'\n{Yb_DCT8x8}\n!=\n{Yb_DCT8x8_actual}'

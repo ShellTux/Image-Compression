@@ -4,6 +4,11 @@ from step1_color_space_conversion import rgb_to_ycbcr
 from step3_discrete_cosine_transform import dct_channel, idct_channel, apply_dct_to_channels, recover_channels, dct_blocks, idct_blocks
 import numpy as np
 
+image = plt.imread(TEST_PARAMETERS.image_path)
+r, g, b = image[:, :, 0], image[:, :, 1], image[:, :, 2]
+Y, Cb, Cr = rgb_to_ycbcr(r, g, b)
+Y_dct8, Cb_dct8, Cr_dct8 = dct_blocks(Y), dct_blocks(Cb), dct_blocks(Cr)
+
 def test_dct_channel():
     # Cria uma matriz de teste simples 8x8
     test_channel = np.array([
@@ -28,13 +33,6 @@ def test_dct_channel():
         f"O sinal recuperado não corresponde ao original:\nOriginal:\n{test_channel}\nRecuperado:\n{recovered}"
 
 def test_full_image_dct():
-    # Carrega imagem de teste
-    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
-
-    # Converte para YCbCr
-    r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
-    Y, Cb, Cr = rgb_to_ycbcr(r, g, b)
-
     # Aplica DCT
     Y_dct, Cb_dct, Cr_dct = apply_dct_to_channels(Y, Cb, Cr)
 
@@ -53,16 +51,6 @@ def test_full_image_dct():
     assert np.abs(Cr_dct[0,0]) > np.mean(np.abs(Cr_dct)), "Energia do canal Cr não está concentrada nas baixas frequências"
 
 def test_dct_8x8():
-    # Carrega a imagem de teste (por exemplo, airport.bmp)
-    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
-
-    # Converte a imagem para o espaço de cor YCbCr
-    r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
-    Y, Cb, Cr = rgb_to_ycbcr(r, g, b)
-
-    # Aplica a DCT em blocos 8x8 no canal Y
-    Y_dct8 = dct_blocks(Y)
-
     # Extrai o bloco de coordenadas [8:16, 8:16]
     block_dct = Y_dct8[8:16, 8:16]
 
@@ -86,18 +74,6 @@ def test_dct_8x8():
 
 
 def test_block_8x8_dct_idct():
-    # Carrega a imagem de teste
-    img = plt.imread(TEST_PARAMETERS['IMAGE-PATH'])
-
-    # Converte para YCbCr
-    r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
-    Y, Cb, Cr = rgb_to_ycbcr(r, g, b)
-
-    # Aplica DCT em blocos 8x8
-    Y_dct8 = dct_blocks(Y)
-    Cb_dct8 = dct_blocks(Cb)
-    Cr_dct8 = dct_blocks(Cr)
-
     # Aplica IDCT em blocos 8x8 para recuperar os canais
     Y_rec8 = idct_blocks(Y_dct8)
     Cb_rec8 = idct_blocks(Cb_dct8)

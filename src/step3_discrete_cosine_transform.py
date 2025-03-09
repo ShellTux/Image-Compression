@@ -1,7 +1,8 @@
-from common import DOCS_DIR, IMAGES, cmGray, generate_path
+from common import DOCS_DIR, IMAGES, generate_path, custom_cmap
 from itertools import product
 from matplotlib import pyplot as plt
 from scipy.fftpack import dct, idct
+import argparse
 import encoder
 import numpy as np
 
@@ -63,7 +64,14 @@ def apply_dct_to_channels(Y: np.ndarray, Cb: np.ndarray, Cr: np.ndarray) -> tupl
 
     return Y_dct, Cb_dct, Cr_dct
 
-def visualize_dct_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.ndarray, *, image_save_path: str | None = None):
+def visualize_dct_channels(
+    Y_dct: np.ndarray,
+    Cb_dct: np.ndarray,
+    Cr_dct: np.ndarray,
+    *,
+    visualize: bool = True,
+    image_save_path: str | None = None
+):
     """
     Visualiza os canais transformados usando transformação logarítmica.
 
@@ -79,22 +87,26 @@ def visualize_dct_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.nda
     Cb_log = np.log(np.abs(Cb_dct) + 0.0001)
     Cr_log = np.log(np.abs(Cr_dct) + 0.0001)
 
-    ax1.imshow(Y_log, cmGray)
+    ax1.imshow(Y_log, custom_cmap.gray)
     ax1.set_title('Y DCT')
     ax1.axis('off')
 
-    ax2.imshow(Cb_log, cmGray)
+    ax2.imshow(Cb_log, custom_cmap.gray)
     ax2.set_title('Cb DCT')
     ax2.axis('off')
 
-    ax3.imshow(Cr_log, cmGray)
+    ax3.imshow(Cr_log, custom_cmap.gray)
     ax3.set_title('Cr DCT')
     ax3.axis('off')
 
     fig.tight_layout()
-    plt.show()
+
+    if visualize:
+        plt.show()
+
     if image_save_path is not None:
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
+        print(f'Saved image: {image_save_path}')
 
 def recover_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
@@ -157,21 +169,30 @@ def idct_blocks(image: np.ndarray, block_size: int = 8) -> np.ndarray:
     return idct_image
 
 def main():
+    parser = argparse.ArgumentParser(description="Discrete Cosine Transform")
+
+    parser.add_argument('--hide-figures', action='store_true', help='Disable matplotlib figures')
+
+    args = parser.parse_args()
+
+    show_figures: bool = not args.hide_figures
+
     for sampling, image_path in product(('4:2:0',), IMAGES):
         print(f'{image_path=}')
         img = plt.imread(image_path)
 
         # Converte para YCbCr
-        _, intermidiate_values = encoder.encoder(img, return_intermidiate_values=True)
+        _, intermidiate_values = encoder.encoder(img, downsampling=sampling, return_intermidiate_values=True)
         # TODO: We need to apply dct on upscaled downsampled cb and cr
-        Y, Cb, Cr = intermidiate_values['y'], intermidiate_values['cb'], intermidiate_values['cr']
+        Y, Cb, Cr = intermidiate_values.Y, intermidiate_values.Cb, intermidiate_values.Cr
 
         Y_dct, Cb_dct, Cr_dct = apply_dct_to_channels(Y, Cb, Cr)
 
         # Visualiza os resultados da DCT
-        print("Visualizando resultados da DCT (usando transformação logarítmica)...")
+        if show_figures:
+            print("Visualizando resultados da DCT (usando transformação logarítmica)...")
         image_save_path = generate_path(image_path, 'dct-logarithmic-transformation', output_dir=DOCS_DIR)
-        visualize_dct_channels(Y_dct, Cb_dct, Cr_dct, image_save_path=image_save_path)
+        visualize_dct_channels(Y_dct, Cb_dct, Cr_dct, image_save_path=image_save_path, visualize=show_figures)
 
         # 7.2.3: Encoder - Aplicar DCT em blocos 8x8
         Y_dct8 = dct_blocks(Y)
@@ -179,9 +200,10 @@ def main():
         Cr_dct8 = dct_blocks(Cr)
 
         # Visualizar as imagens obtidas
-        print("Visualizando resultados da DCT em blocos 8x8...")
+        if show_figures:
+            print("Visualizando resultados da DCT em blocos 8x8...")
         image_save_path = generate_path(image_path, 'dct-blocks-8x8', output_dir=DOCS_DIR)
-        visualize_dct_channels(Y_dct8, Cb_dct8, Cr_dct8, image_save_path=image_save_path)
+        visualize_dct_channels(Y_dct8, Cb_dct8, Cr_dct8, image_save_path=image_save_path, visualize=show_figures)
 
         # 7.3: Aplicar DCT em blocos 64x64
         Y_dct64 = dct_blocks(Y, 64)
@@ -189,9 +211,10 @@ def main():
         Cr_dct64 = dct_blocks(Cr, 64)
 
         # Visualizar as imagens obtidas
-        print("Visualizando resultados da DCT em blocos 64x64...")
+        if show_figures:
+            print("Visualizando resultados da DCT em blocos 64x64...")
         image_save_path = generate_path(image_path, 'dct-blocks-64x64', output_dir=DOCS_DIR)
-        visualize_dct_channels(Y_dct64, Cb_dct64, Cr_dct64, image_save_path=image_save_path)
+        visualize_dct_channels(Y_dct64, Cb_dct64, Cr_dct64, image_save_path=image_save_path, visualize=show_figures)
 
 if __name__ == "__main__":
     main()
