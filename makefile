@@ -9,11 +9,5 @@ PANDOC_OPTS += --filter=pandoc-include
 $(ARCHIVE): $(REPORT)
 	git archive --verbose --format=zip $(^:%=--add-file=% ) --output=$@ HEAD
 
-.PHONY: $(PYTHON_SCRIPTS)
-$(PYTHON_SCRIPTS): %:
-	python $@ --hide-figures
-
-$(IMAGES): $(PYTHON_SCRIPTS)
-
 %.pdf: %.md $(IMAGES)
 	pandoc $(PANDOC_OPTS) --output=$@ $<
