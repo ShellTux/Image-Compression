@@ -9,5 +9,5 @@ PANDOC_OPTS += --filter=pandoc-include
 $(ARCHIVE): $(REPORT)
 	git archive --verbose --format=zip $(^:%=--add-file=% ) --output=$@ HEAD
 
-%.pdf: %.md $(IMAGES)
+%.pdf: %.md
 	pandoc $(PANDOC_OPTS) --output=$@ $<
