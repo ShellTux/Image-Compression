@@ -292,4 +292,4 @@ $RECYCLE.BIN/
 build
 *.pdf
 *.zip
-docs/*.png
+docs/step*/*.png

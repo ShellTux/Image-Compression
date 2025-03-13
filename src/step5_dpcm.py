@@ -1,7 +1,6 @@
 from common import DOCS_DIR, IMAGES, TEST_PARAMETERS, generate_path, custom_cmap
 from matplotlib import pyplot as plt
 import argparse
-import cv2
 import encoder
 import itertools
 import numpy as np
@@ -290,7 +289,7 @@ def main():
         Y_dpcm, Cb_dpcm, Cr_dpcm = apply_dpcm_to_channels(Yb_dct8, Cbb_dct8, Crb_dct8)
 
         # Visualizar os canais com DPCM
-        dpcm_path = generate_path(image_path, "dpcm", output_dir=DOCS_DIR)
+        dpcm_path = generate_path(image_path, "dpcm", output_dir=f'{DOCS_DIR}/step5')
         visualize_dpcm_channels(
             Y_dpcm,
             Cb_dpcm,
@@ -303,7 +302,7 @@ def main():
         Y_recovered, Cb_recovered, Cr_recovered = recover_channels_from_dpcm(Y_dpcm, Cb_dpcm, Cr_dpcm)
 
         # Visualizar os canais recuperados
-        idpcm_path = generate_path(image_path, "idpcm", output_dir=DOCS_DIR)
+        idpcm_path = generate_path(image_path, "idpcm", output_dir=f'{DOCS_DIR}/step5')
         visualize_idpcm_channels(
             Y_recovered,
             Cb_recovered,

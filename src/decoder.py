@@ -2,6 +2,7 @@ from common import VALID_DOWNSAMPLES_TYPE
 from encoder import JpegEncodedData
 import cv2
 import numpy as np
+import step0_preprocessing as prep
 import step1_color_space_conversion as csc
 import step2_chrominance_downsampling as cd
 import step3_discrete_cosine_transform as dct
@@ -101,7 +102,7 @@ def decoder(
 
     # Recorta para o tamanho original (remove o padding)
     h, w, _ = encoded_data.original_image_shape
-    image_reconstructed = image_reconstructed[:h, :w]
+    image_reconstructed = prep.ipadding(image_reconstructed, (h, w))
 
     # Garante que os valores estão no intervalo correto
     image_reconstructed = image_reconstructed.clip(0, 255).astype(np.uint8)

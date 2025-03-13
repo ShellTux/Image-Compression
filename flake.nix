@@ -32,6 +32,7 @@
             pkgs.imv
             pkgs.pandoc
             pkgs.pandoc-include
+            pkgs.parallel
             pkgs.qiv
             pkgs.texliveFull
           ];

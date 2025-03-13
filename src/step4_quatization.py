@@ -142,7 +142,7 @@ def main():
             if show_figures:
                 plt.show()
 
-            image_save_path = generate_path(image_path, f'quantization-{quality_factor}', output_dir=DOCS_DIR)
+            image_save_path = generate_path(image_path, f'quantization-{quality_factor}', output_dir=f'{DOCS_DIR}/step4')
             fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
             print(f'Saved image: {image_save_path}')
 

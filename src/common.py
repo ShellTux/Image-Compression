@@ -1,8 +1,9 @@
-import os
+from sys import stderr
 from typing import Literal, NamedTuple
 import cv2
-import numpy as np
 import matplotlib.colors as clr
+import numpy as np
+import os
 
 IMAGES = ('./images/airport.bmp', './images/geometric.bmp', './images/nature.bmp')
 QUALITIES = (75, 50, 25)
@@ -33,12 +34,12 @@ class ColorMap(NamedTuple):
     blue: clr.LinearSegmentedColormap
     gray: clr.LinearSegmentedColormap
 
-custom_cmap = ColorMap(
-    clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(1,0,0)], N = 256),
-    clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,1,0)], N = 256),
-    clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,0,1)], N = 256),
-    clr.LinearSegmentedColormap.from_list("gray", [(0,0,0),(1,1,1)], N = 256),
-)
+red_cmap = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(1,0,0)], N = 256)
+green_cmap = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,1,0)], N = 256)
+blue_cmap = clr.LinearSegmentedColormap.from_list("red", [(0,0,0),(0,0,1)], N = 256)
+gray_cmap = clr.LinearSegmentedColormap.from_list("gray", [(0,0,0),(1,1,1)], N = 256)
+
+custom_cmap = ColorMap(red_cmap, green_cmap, blue_cmap, gray_cmap)
 
 class ColorConversion(NamedTuple):
     rgb_to_ycbcr: np.ndarray
@@ -66,9 +67,20 @@ def generate_path(
     suffix: str,
     *,
     output_dir: str,
-    file_extension: str | None = 'png'
+    file_extension: str | None = 'png',
+    create_directory: bool = True,
 ) -> str:
     assert output_dir is not None and len(output_dir) > 0, f'Invalid output_dir: {output_dir}. Needs to be not empty'
+
+    if create_directory:
+        try:
+            os.mkdir(output_dir)
+            print(f"Directory '{output_dir}' created successfully.")
+        except FileExistsError:
+            pass
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
     base = os.path.basename(image_path).split('.')
     if file_extension is None:
         return f'{output_dir}/{base[-2]}-{suffix}.{base[-1]}'

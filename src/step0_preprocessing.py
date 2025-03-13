@@ -43,6 +43,12 @@ def padding(img: np.ndarray, size: tuple[int, int]) -> np.ndarray:
 
     return padded_img
 
+def ipadding(image: np.ndarray, size: tuple[int, int]) -> np.ndarray:
+    h, w = size
+    image_reconstructed = image[:h, :w]
+
+    return image_reconstructed
+
 def main():
     parser = argparse.ArgumentParser(description="Preprocessing")
 
@@ -80,7 +86,7 @@ def main():
         if show_figures:
             plt.show()
 
-        image_save_path = generate_path(image_path, 'padding', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, 'padding', output_dir=f'{DOCS_DIR}/step0')
         fig.savefig(image_save_path,bbox_inches='tight', dpi=150)
         print(f'Saved image: {image_save_path}')
 

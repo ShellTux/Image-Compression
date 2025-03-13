@@ -46,7 +46,11 @@ def idct_channel(channel: np.ndarray, norm: str = "ortho") -> np.ndarray:
 
     return idct_2d
 
-def apply_dct_to_channels(Y: np.ndarray, Cb: np.ndarray, Cr: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def apply_dct_to_channels(
+    Y: np.ndarray,
+    Cb: np.ndarray,
+    Cr: np.ndarray
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Aplica a DCT nos três canais (Y, Cb, Cr).
 
@@ -108,7 +112,11 @@ def visualize_dct_channels(
         fig.savefig(image_save_path, bbox_inches='tight', dpi=150)
         print(f'Saved image: {image_save_path}')
 
-def recover_channels(Y_dct: np.ndarray, Cb_dct: np.ndarray, Cr_dct: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def recover_channels(
+    Y_dct: np.ndarray,
+    Cb_dct: np.ndarray,
+    Cr_dct: np.ndarray
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Recupera os canais originais aplicando IDCT.
 
@@ -191,7 +199,7 @@ def main():
         # Visualiza os resultados da DCT
         if show_figures:
             print("Visualizando resultados da DCT (usando transformação logarítmica)...")
-        image_save_path = generate_path(image_path, 'dct-logarithmic-transformation', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, 'dct-logarithmic-transformation', output_dir=f'{DOCS_DIR}/step3')
         visualize_dct_channels(Y_dct, Cb_dct, Cr_dct, image_save_path=image_save_path, visualize=show_figures)
 
         # 7.2.3: Encoder - Aplicar DCT em blocos 8x8
@@ -202,7 +210,7 @@ def main():
         # Visualizar as imagens obtidas
         if show_figures:
             print("Visualizando resultados da DCT em blocos 8x8...")
-        image_save_path = generate_path(image_path, 'dct-blocks-8x8', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, 'dct-blocks-8x8', output_dir=f'{DOCS_DIR}/step3')
         visualize_dct_channels(Y_dct8, Cb_dct8, Cr_dct8, image_save_path=image_save_path, visualize=show_figures)
 
         # 7.3: Aplicar DCT em blocos 64x64
@@ -213,7 +221,7 @@ def main():
         # Visualizar as imagens obtidas
         if show_figures:
             print("Visualizando resultados da DCT em blocos 64x64...")
-        image_save_path = generate_path(image_path, 'dct-blocks-64x64', output_dir=DOCS_DIR)
+        image_save_path = generate_path(image_path, 'dct-blocks-64x64', output_dir=f'{DOCS_DIR}/step3')
         visualize_dct_channels(Y_dct64, Cb_dct64, Cr_dct64, image_save_path=image_save_path, visualize=show_figures)
 
 if __name__ == "__main__":
