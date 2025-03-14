@@ -430,9 +430,24 @@ Função: `dct_blocks`
 
 ![Nature DCT blocos 64x64](docs/step3/nature-dct-blocks-64x64.png)
 
-### Resultados
+A comparação dos resultados obtidos em 7.1 (DCT de canais completos), 7.2 (DCT
+em blocos de 8x8) e 7.3 (DCT em blocos de 64x64) demonstra diferenças
+significativas no potencial de compressão. Quando se utiliza a DCT em blocos de
+8x8, observa-se uma melhoria considerável na compressão em comparação com a
+aplicação da DCT no canal completo. Isso porque a abordagem em blocos permite
+uma melhor representação da informação de frequência, aproveitando a
+redundância espacial nas imagens, resultando em melhores taxas de compressão.
 
-> XXXXXXXXXXX
+Por outro lado, a utilização de blocos de 64x64, apesar de ainda fornecer
+compressão, pode levar a uma perda maior na qualidade visual, uma vez que uma
+maior quantidade de informação é perdida devido ao tamanho do bloco. Os
+artefatos visuais podem ser mais evidentes, especialmente em imagens com
+detalhes finos. Assim, a escolha do tamanho do bloco tem impacto direto tanto
+na taxa de compressão quanto na qualidade da imagem reconstruída.
+
+Em suma, o método de blocos de 8x8 demonstra um ótimo equilíbrio entre
+compressão e qualidade visual, enquanto o método de blocos de 64x64, apesar de
+uma maior compressão, pode resultar em perdas visuais significativas.
 
 ## 8: Quantização
 
@@ -440,7 +455,7 @@ Ficheiro: `src/step4_quatization.py`
 
 ### 8.1: Quantização dos coeficientes
 
-> 8.1. Crie uma função para quantizar os coeficientes da DCT para cada bloco 8x8.
+> Crie uma função para quantizar os coeficientes da DCT para cada bloco 8x8.
 
 Função: `quantization`
 
@@ -450,7 +465,7 @@ Função: `quantization`
 
 ### 8.2: Inversa quantização
 
-> 8.2. Crie também a função inversa.
+> Crie também a função inversa.
 
 Função: `iquantization`
 
@@ -460,34 +475,147 @@ Função: `iquantization`
 
 ### 8.3: Encoder
 
-> 8.3. Encoder: Quantize os coeficientes da DCT, usando os seguintes factores de qualidade:
-> 10, 25, 50, 75 e 100. Visualize as imagens obtidas (Y_q, CB_q e Cr_q).
+> Encoder: Quantize os coeficientes da DCT, usando os seguintes factores de
+> qualidade: 10, 25, 50, 75 e 100. Visualize as imagens obtidas (Y_q, CB_q e
+> Cr_q).
 
 ### 8.4: Decoder
 
-> 8.4. Decoder: Desquantize os coeficientes da DCT, usando os mesmos factores de
+> Decoder: Desquantize os coeficientes da DCT, usando os mesmos factores de
 > qualidade. Visualize as imagens obtidas.
 
 ### 8.5: Compare os resultados
 
-> 8.5. Compare os resultados obtidos com os vários factores de qualidade e discuta-os
-> em termos de potencial de compressão.
+> Compare os resultados obtidos com os vários factores de qualidade e
+> discuta-os em termos de potencial de compressão.
+
+A comparação dos resultados obtidos com diferentes fatores de qualidade ao
+realizar a quantização dos coeficientes da DCT mostra uma clara relação entre a
+qualidade da imagem e a taxa de compressão. Os fatores de qualidade mais baixos
+(por exemplo, 10 e 25) resultam em uma compressão mais forte, mas também
+introduzem artefatos visuais notáveis e perda de detalhes na imagem. À medida
+que o fator de qualidade aumenta, a qualidade visual da imagem reconstruída
+melhora, mas a taxa de compressão diminui.
+
+Imagens quantizadas com fatores de qualidade mais altos (50, 75, e 100) mantêm
+mais detalhes e apresentam menos artefatos, resultando em uma sensação visual
+mais agradável, mas com menor compressão. Portanto, a escolha do fator de
+qualidade deve estar alinhada às necessidades específicas de cada aplicação,
+considerando um trade-off entre a qualidade da imagem desejada e a eficiência
+de compressão.
 
 ### 8.6: Compare os resultados
 
-> 8.6. Compare os resultados obtidos com os da alínea 7 (DCT) e tire conclusões.
+> Compare os resultados obtidos com os da alínea 7 (DCT) e tire conclusões.
+
+Ao comparar os resultados obtidos nas alíneas 7 (DCT) e 8 (quantização),
+torna-se evidente que a quantização tem um impacto significativo no potencial
+de compressão e na qualidade da imagem resultante. Enquanto a DCT reduz a
+informação espacial em frequências, a quantização aplica um nível adicional de
+redução de dados ao eliminar informações que são percebidas como menos
+relevantes para a visualização humana.
+
+Os resultados mostram que a DCT sozinha pode ainda gerar uma imagem de
+qualidade aceitável, mas a aplicação de quantização acentua a redução de
+detalhes em contrapartida a um aumento na taxa de compressão. A quantização,
+dependendo do fator de qualidade, pode acentuar a perda de dados e introduzir
+artefatos, enquanto resulta em formatos mais compactos de armazenamento.
+
+Em suma, a combinação de DCT e quantização é crucial para o processo de
+compressão JPEG, e a escolha cuidadosa de fatores de qualidade pode otimizar
+tanto a compressão quanto a qualidade visual da imagem.
 
 ## 9: Codificação DPCM dos coeficientes DC
 
-### 9.5: Analise os resultados e tire conclusões
+Ficheiro: `src/step5_dpcm.py`
 
-> XXXXXXXXXXXXXXXXXXXX
+### 9.1: Codificação dos coeficientes DC de cada bloco
+
+> Crie uma função para realizar a codificação dos coeficientes DC de cada
+> bloco. Em cada bloco, substitua o valor DC pelo valor da diferença.
+
+Função: `dpcm_encode`
+
+### 9.2: Decodificação dos coeficientes DC de cada bloco
+
+> Crie também a função inversa.
+
+Função: `dpcm_decode`
+
+### 9.3: Encoder
+
+> Encoder: Aplique a função 9.1 aos valores da DCT quantizada, obtendo Y_dpcm,
+> Cb_dpcm e Cr_dpcm).
+
+### 9.4: Decoder
+
+> Decoder: Aplique a função inversa (9.2) e certifique-se de que consegue obter
+> os valores originais de Y_q, Cb_q e Cr_q.
+
+### 9.5: Resultados e Conclusões
+
+> Analise os resultados e tire conclusões.
+
+Ao analisar os resultados da codificação DPCM dos coeficientes DC, observa-se
+uma redução significativa na quantidade de dados necessários para representar
+as diferenças entre os valores DC de cada bloco. A codificação DPCM melhora
+ainda mais a eficiência da compressão ao armazenar a diferença de cada valor DC
+em vez do valor absoluto, que é especialmente útil quando os valores
+consecutivos são geralmente similares, resultando em valores de diferença
+pequenos que caem num espetro mais pequeno portanto mais fácil de comprimir.
+
+As conclusões tiradas a partir dos resultados indicam que esta abordagem não
+apenas reduz o tamanho do arquivo, mas também pode ser integrada eficazmente
+com outros passos do processo de compressão (como a DCT e a quantização) para
+otimizar o desempenho geral do codec JPEG. Esta técnica é especialmente eficaz
+em imagens com alta redundância, onde as diferenças entre pixels adjacentes são
+mínimas.
 
 ## 10: Codificação e descodificação end-to-end
 
-### 10.5
+> Codificação e descodificação end-to-end.
 
-> Visualize as imagens descodificadas. Visualize também a imagem das diferenças entre o canal Y de cada uma das imagens originais e da imagem descodificada respectiva para cada um dos factores de qualidade testados. Calcule as várias métricas de distorção (imagem RGB: MSE, RMSE, SNR, PSNR; canal Y: max_diff e avg_diff) para cada uma das imagens e factores de qualidade. Tire conclusões.
+> [!NOTE]
+> As funções criadas na alínea 2 deverão conter, neste momento, todo o código
+> de codificação e descodificação desenvolvido nas alíenas 3 a 9. Note que,
+> após a quantização da DCT, não se pretende, neste trabalho, aplicar os passos
+> de compressão não destrutiva dos coeficientes AC (RLE, Huffman / códigos
+> aritméticos).
+
+Ficheiro: `src/step10_error_analysis.py`
+
+### 10.1: Encoder
+
+> Encoder: Codifique as imagens fornecidas com os seguintes parâmetros de
+> qualidade: 10, 25, 50, 75 e 100.
+
+### 10.2: Decoder
+
+> Decoder: Reconstrua as imagens com base no resultado de 10.1.
+
+### 10.3 Cálculo das diferenças
+
+> Crie uma função para cálculo da imagem das diferenças (entre o canal Y da
+> original e da descompactada).
+
+Função: `calculate_absolute_difference`
+
+### 10.4 Cálculo das métricas de distorção
+
+> Crie uma função para cálculo das métricas de distorção MSE, RMSE, SNR, PSNR,
+> max_diff e avg_diff (por comparação da imagem original com a descompactada).
+
+Função: `calculate_error_metrics`
+
+### 10.5: Visualização das imagens e métricas
+
+> Visualize as imagens descodificadas. Visualize também a imagem das diferenças
+> entre o canal Y de cada uma das imagens originais e da imagem descodificada
+> respectiva para cada um dos factores de qualidade testados. Calcule as várias
+> métricas de distorção (imagem RGB: MSE, RMSE, SNR, PSNR; canal Y: max_diff e
+> avg_diff) para cada uma das imagens e factores de qualidade. Tire conclusões.
+
+Função: `visualize_difference`
 
 ```console
 Analisando imagem: ./images/airport.bmp
@@ -508,9 +636,40 @@ Max diff: 42.590732421874975
 Avg diff: 2.6200079295793888
 ```
 
+A visualização das imagens descodificadas e das imagens de diferença entre o
+canal Y original e o canal Y descodificado revela as distorções introduzidas ao
+longo do processo de compressão e descompressão. Através dos cálculos das
+métricas de distorção, como MSE, RMSE, SNR e PSNR, podemos quantificar a
+qualidade da imagem resultante em comparação com a imagem original.
 
-### Conclusões:
+As métricas demonstram que, à medida que o fator de qualidade aumenta, as
+medidas de distorção (como MSE e RMSE) diminuem, indicando uma melhoria na
+qualidade visual da imagem. As médias de diferença, max_diff e avg_diff no
+canal Y nos fornecem uma visão mais granular sobre como a compressão afeta a
+imagem em termos de luminosidade e detalhes.
 
-> XXXXXXXXXXXXXXXXXXXX
+Esses dados são cruciais para entender o trade-off entre compressão e qualidade
+e podem ajudar a refinar ainda mais algoritmos de compressão, garantindo que a
+qualidade visual desejada seja mantida enquanto a quantidade de dados é
+reduzida com sucesso.
 
-### 10.6: Volte a analisar a alínea 1, de forma a validar/complementar as conclusões tiradas nesse ponto.
+### 10.6: Análise e conclusões
+
+> 10.6. Volte a analisar a alínea 1, de forma a validar/complementar as
+> conclusões tiradas nesse ponto.
+
+Após revisar a alínea 1, confirmam-se várias conclusões iniciais sobre o
+impacto da compressão JPEG na qualidade das imagens. À medida que ajustamos os
+fatores de qualidade e as técnicas aplicadas (como DCT, quantização e DPCM),
+notamos que a qualidade da imagem é influenciada pela natureza da imagem
+(fotográfica, geométrica) e pelas configurações de compressão escolhidas. As
+imagens fotográficas geralmente mantêm uma aparência mais natural mesmo em
+compressões mais altas, enquanto as imagens geométricas tendem a sofrer mais
+com artefatos de compressão, o que reafirma a necessidade de escolher o método
+de compressão de acordo com o conteúdo da imagem.
+
+A análise conclui que um equilíbrio adequado entre a taxa de compressão e a
+qualidade visual é crucial para aplicações práticas e que as decisões sobre
+quais técnicas aplicar e quais parâmetros utilizar devem ser informadas pelo
+contexto em que as imagens serão utilizadas.
+mais, é só avisar.
