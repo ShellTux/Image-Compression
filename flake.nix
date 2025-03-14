@@ -27,6 +27,7 @@
             pythonPackages.bpython
             pythonPackages.pip
             pythonPackages.venvShellHook
+            pkgs.entr
             pkgs.ffmpeg
             pkgs.gnumake
             pkgs.imv
