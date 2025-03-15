@@ -573,6 +573,8 @@ Max diff: 42.590732421874975
 Avg diff: 2.6200079295793888
 ```
 
+![Airport Error Analysis](docs/airport-error-analysis-qf75-422.png)
+
 A visualização das imagens descodificadas e das imagens de diferença entre o
 canal Y original e o canal Y descodificado revela as distorções introduzidas ao
 longo do processo de compressão e descompressão. Através dos cálculos das
