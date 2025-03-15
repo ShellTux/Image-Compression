@@ -1,4 +1,4 @@
-from common import DOCS_DIR, IMAGES, custom_cmap, generate_path
+from common import COLOR_CONVERSION, DOCS_DIR, IMAGES, custom_cmap, generate_path
 import argparse
 import encoder
 import matplotlib.pyplot as plt
@@ -11,33 +11,43 @@ def rgb_from_ndarray(img: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarra
 def rgb_to_ycbcr(
     red: np.ndarray,
     green: np.ndarray,
-    blue: np.ndarray
+    blue: np.ndarray,
+    *,
+    matrix_multiplication: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Convert image from RGB to YCbCr color space.
+    Convert image from RGB to YCbCr color space using matrix multiplication.
 
     Args:
-        image (ndarray): RGB image.
+        red (ndarray): Red channel of the image.
+        green (ndarray): Green channel of the image.
+        blue (ndarray): Blue channel of the image.
+        matrix_multiplication (bool) [Optional]: use matrix multiplication
 
     Returns:
-        ndarray: YCbCr image.
+        tuple[ndarray, ndarray, ndarray]: Y, Cb, Cr channels.
     """
 
-    # TODO(Luís Góis): eu tentei multiplicação de matrizes mas
-    # não consigo meter isso a funcionar
-    y = 0.299      * red + 0.587    * green + 0.114    * blue
-    cb = -0.168736 * red - 0.331264 * green + 0.5      * blue
-    cr = 0.5       * red - 0.418688 * green - 0.081312 * blue
+    # WARN: Matrix multiplication is not working, and Idk why? :(
+    if matrix_multiplication:
+        rgb = np.stack((red, green, blue), axis=-1)
 
-    cb += 128
-    cr += 128
+        ycbcr = rgb @ COLOR_CONVERSION.RGB2YCbCr_matrix + COLOR_CONVERSION.RGB2YCbCr_offset
+
+        y, cb, cr = ycbcr[:, :, 0], ycbcr[:, :, 1], ycbcr[:, :, 2]
+    else:
+        y = 0.299      * red + 0.587    * green + 0.114    * blue + 0
+        cb = -0.168736 * red - 0.331264 * green + 0.5      * blue + 128
+        cr = 0.5       * red - 0.418688 * green - 0.081312 * blue + 128
 
     return y, cb, cr
 
 def ycbcr_to_rgb(
     y: np.ndarray,
     cb: np.ndarray,
-    cr: np.ndarray
+    cr: np.ndarray,
+    *,
+    matrix_multiplication: bool = False,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Convert image from YCbCr to RGB color space.
@@ -46,6 +56,7 @@ def ycbcr_to_rgb(
         y (ndarray): Y channel
         cb (ndarray): Cb channel
         cr (ndarray): Cr channel
+        matrix_multiplication (bool): Use matrix multiplication if True.
 
     Returns:
         tuple: (r, g, b) channels
@@ -53,9 +64,20 @@ def ycbcr_to_rgb(
     cb = cb - 128
     cr = cr - 128
 
-    r = y                 + 1.402    * cr
-    g = y - 0.344136 * cb - 0.714136 * cr
-    b = y + 1.772    * cb
+    if matrix_multiplication:
+        channels = np.stack((y, cb, cr), axis=-1)
+
+        rgb = (channels @ COLOR_CONVERSION.YCbCr2RGB_matrix.T).clip(0, 255).astype(np.uint8)
+
+        r, g, b = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
+    else:
+        r = y                 + 1.402    * cr
+        g = y - 0.344136 * cb - 0.714136 * cr
+        b = y + 1.772    * cb
+
+        r = r.clip(0, 255).astype(np.uint8)
+        g = g.clip(0, 255).astype(np.uint8)
+        b = b.clip(0, 255).astype(np.uint8)
 
     return r, g, b
 

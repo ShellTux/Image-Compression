@@ -42,10 +42,10 @@ gray_cmap = clr.LinearSegmentedColormap.from_list("gray", [(0,0,0),(1,1,1)], N =
 custom_cmap = ColorMap(red_cmap, green_cmap, blue_cmap, gray_cmap)
 
 class ColorConversion(NamedTuple):
-    rgb_to_ycbcr: np.ndarray
-    rgb_to_ycbcr_offset: np.ndarray
-    ycbcr_to_rgb: np.ndarray
-    ycbcr_to_rgb_offset: np.ndarray
+    RGB2YCbCr_matrix: np.ndarray
+    RGB2YCbCr_offset: np.ndarray
+    YCbCr2RGB_matrix: np.ndarray
+    YCbCr2RGB_offset: np.ndarray
 
 COLOR_CONVERSION = ColorConversion(
     np.array([
