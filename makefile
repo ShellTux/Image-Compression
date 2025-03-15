@@ -11,7 +11,11 @@ PANDOC_OPTS += --filter=pandoc-include
 	pandoc $(PANDOC_OPTS) --output=$@ $<
 
 $(ARCHIVE): $(REPORT) $(IMAGES)
-	git archive --verbose --format=zip $(^:%=--add-file=% ) --output=$@ HEAD
+	rm --force $@
+	git ls-files > files.txt
+	ls -1 $^ >> files.txt
+	sort --output=files.txt files.txt
+	zip -@ $@ < files.txt
 
 .PHONY: archive
 archive: $(ARCHIVE)

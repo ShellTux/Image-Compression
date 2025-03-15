@@ -293,3 +293,4 @@ build
 *.pdf
 *.zip
 docs/step*/*.png
+files.txt
