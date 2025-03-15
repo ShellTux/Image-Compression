@@ -36,6 +36,8 @@
             pkgs.parallel
             pkgs.qiv
             pkgs.texliveFull
+            pkgs.unzip
+            pkgs.zip
           ];
         };
 
