@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from scipy.fftpack import dct, idct
 import argparse
 import encoder
+import itertools
 import numpy as np
 
 def dct_channel(channel: np.ndarray, norm: str = "ortho") -> np.ndarray:
@@ -169,10 +170,9 @@ def idct_blocks(image: np.ndarray, block_size: int = 8) -> np.ndarray:
     h, w = image.shape
     idct_image = np.zeros_like(image)
 
-    for i in range(0, h, block_size):
-        for j in range(0, w, block_size):
-            block = image[i:i + block_size, j:j + block_size]
-            idct_image[i:i + block_size, j:j + block_size] = idct_channel(block)
+    for i, j in itertools.product(range(0, h, block_size), range(0, w, block_size)):
+        block = image[i:i + block_size, j:j + block_size]
+        idct_image[i:i + block_size, j:j + block_size] = idct_channel(block)
 
     return idct_image
 

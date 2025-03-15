@@ -1,4 +1,3 @@
-from sys import stderr
 from typing import Literal, NamedTuple
 import cv2
 import matplotlib.colors as clr
