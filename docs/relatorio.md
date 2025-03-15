@@ -82,9 +82,6 @@ Ficheiro: `src/common.py`
 
 > Crie uma função para implementar um colormap definido pelo utilizador.
 
-```python
-!include`snippetStart="red_cmap", snippetEnd="custom_cmap = ColorMap(red_cmap, green_cmap, blue_cmap, gray_cmap)", includeSnippetDelimiters=True` ./src/common.py
-```
 
 ### 3.3: Visualização de uma imagem com uma palete
 
@@ -97,10 +94,6 @@ Ficheiro: `src/step1_color_space_conversion.py`
 > Encoder: Crie uma função para separar a imagem nos seus componentes RGB.
 
 Função: `rgb_from_ndarray`
-
-```python
-!include`snippetStart="def rgb_from_ndarray", snippetEnd="return r, g, b", includeSnippetDelimiters=True` ./src/step1_color_space_conversion.py
-```
 
 ### 3.6: Resultados
 
@@ -123,10 +116,6 @@ Ficheiro: `src/step0_preprocessing.py`
 
 Função: `padding`
 
-```python
-!include`snippetStart="def padding", snippetEnd="return padded_img", includeSnippetDelimiters=True` ./src/step0_preprocessing.py
-```
-
 ### 4.2: Decoder
 
 > Decoder: Crie também a função inversa para remover o padding. Certifique-se
@@ -134,10 +123,6 @@ Função: `padding`
 > original.
 
 Função: `ipadding`
-
-```python
-!include`snippetStart="def ipadding", snippetEnd="return image_reconstructed", includeSnippetDelimiters=True` ./src/step0_preprocessing.py
-```
 
 ### Resultados
 
@@ -158,10 +143,6 @@ Ficheiro: `src/step1_color_space_conversion.py`
 
 Função: `rgb_to_ycbcr`
 
-```python
-!include`snippetStart="def rgb_to_ycbcr", snippetEnd="return y, cb, cr", includeSnippetDelimiters=True` ./src/step1_color_space_conversion.py
-```
-
 ### 5.2: Inversa conversão
 
 > Crie também a função inversa (conversão de YCbCr para RGB). Nota: na
@@ -169,10 +150,6 @@ Função: `rgb_to_ycbcr`
 > inteiros no intervalo {0, 1, …, 255}.
 
 Função: `ycbcr_to_rgb`
-
-```python
-!include`snippetStart="def ycbcr_to_rgb", snippetEnd="return r, g, b", includeSnippetDelimiters=True` ./src/step1_color_space_conversion.py
-```
 
 ### 5.5: Resultados e Conclusões
 
@@ -227,19 +204,11 @@ Ficheiro: `src/step2_chrominance_downsampling.py`
 
 Função: `downsample_ycbcr`
 
-```python
-!include`snippetStart="def downsample_ycbcr", snippetEnd="return Y, Cb_d, Cr_d", includeSnippetDelimiters=True` ./src/step2_chrominance_downsampling.py
-```
-
 ### 6.2: Upsampling
 
 > Crie também a função para efectuar a operação inversa, i.e., upsampling.
 
 Função: `upsample_ycbcr`
-
-```python
-!include`snippetStart="def upsample_ycbcr", snippetEnd="return cv2.merge([Y, Cb_u, Cr_u])", includeSnippetDelimiters=True` ./src/step2_chrominance_downsampling.py
-```
 
 ### 6.3: Encoder
 
@@ -327,10 +296,6 @@ Ficheiro: `src/step3_discrete_cosine_transform.py`
 
 Função: `dct_channel`
 
-```python
-!include`snippetStart="def dct_channel", snippetEnd="return dct(dct(channel, type=2, norm=\"ortho\").T, type=2, norm=\"ortho\").T", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
-
 #### 7.1.2: DCT inverso de um canal completo
 
 > Crie também a função inversa (usando scipy.fftpack.idct). Nota: para uma
@@ -338,10 +303,6 @@ Função: `dct_channel`
 > norm=”ortho”).T, norm=”ortho”).T
 
 Função: `idct_channel`
-
-```python
-!include`snippetStart="def idct_channel", snippetEnd="return idct(idct(channel.T, type=2, norm=norm).T, type=2, norm=norm)", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
 
 #### 7.1.3: Encoder
 
@@ -353,20 +314,12 @@ Função: `idct_channel`
 
 Função: `apply_dct_to_channels`
 
-```python
-!include`snippetStart="def apply_dct_to_channels", snippetEnd="return Y_dct, Cb_dct, Cr_dct", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
-
 #### 7.1.4: Decoder
 
 > Decoder: Aplique a função inversa (7.1.2) e certifique-se de que consegue
 > obter os valores originais de Y_d, Cb_d e Cr_d.
 
 Função: `recover_channels`
-
-```python
-!include`snippetStart="def recover_channels", snippetEnd="return Y, Cb, Cr", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
 
 ### 7.2: DCT em blocos 8x8
 
@@ -377,19 +330,11 @@ Função: `recover_channels`
 
 Função: `dct_blocks`
 
-```python
-!include`snippetStart="def dct_blocks", snippetEnd="return dct_image", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
-
 #### 7.2.2: IDCT em blocos
 
 > Crie também a função inversa (IDCT BSxBS).
 
 Função: `idct_blocks`
-
-```python
-!include`snippetStart="def idct_blocks", snippetEnd="return idct_image", includeSnippetDelimiters=True` ./src/step3_discrete_cosine_transform.py
-```
 
 #### 7.2.3: Encoder
 
@@ -459,19 +404,11 @@ Ficheiro: `src/step4_quatization.py`
 
 Função: `quantization`
 
-```python
-!include`snippetStart="def quantization", snippetEnd="return quantized_image", includeSnippetDelimiters=True` ./src/step4_quatization.py
-```
-
 ### 8.2: Inversa quantização
 
 > Crie também a função inversa.
 
 Função: `iquantization`
-
-```python
-!include`snippetStart="def iquantization", snippetEnd="return dct_image", includeSnippetDelimiters=True` ./src/step4_quatization.py
-```
 
 ### 8.3: Encoder
 
