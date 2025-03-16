@@ -83,13 +83,87 @@ pytest
 
 ## Project Structure
 
-- `docs`: Contains documentation files.
-- `images`: Includes example images for testing the encoding algorithm.
-- `src`: Holds the source code for the JPEG encoding algorithm.
-- `flake.lock` and `flake.nix`: Flake lock and nix files for dependency management.
-- `LICENSE`: The license file for the project.
-- `README.md`: The file you are currently reading.
-- `requirements.txt`: List of required packages for the project.
+<!--Report Project Structure Start-->
+
+This repository is organized into several key directories and files to maintain
+clarity and functionality for the JPEG codec implementation. Below is an
+overview of the directory structure:
+
+```
+.
+├── docs                  # Documentation and analysis related files
+│   ├── step0            # Contains images and results for the report
+│   ├── step1            # Contains images and results for the report
+│   ├── step2            # Contains images and results for the report
+│   ├── step3            # Contains images and results for the report
+│   ├── step4            # Contains images and results for the report
+│   ├── step5            # Contains images and results for the report
+│   ├── airport-compression-ffmpeg.png        # Compression results for airport image using FFmpeg
+│   ├── airport-error-analysis-qf75-422.png   # Error analysis for airport image at quality factor 75 (4:2:2)
+│   ├── compression-plot.png                  # Plot visualizing compression metrics
+│   ├── geometric-compression-ffmpeg.png      # Compression results for geometric image using FFmpeg
+│   ├── jpeg-encoding.svg                     # SVG representation of the JPEG encoding process
+│   ├── nature-compression-ffmpeg.png         # Compression results for nature image using FFmpeg
+│   └── relatorio.md                          # Report documenting findings and results
+├── images                # Source images used for compression
+│   ├── airport.bmp       # BMP image of airport for testing
+│   ├── geometric.bmp     # BMP image of geometric shapes for testing
+│   └── nature.bmp        # BMP image of nature for testing
+├── src                                 # Source code for the JPEG codec
+│   ├── alinea10_analise_resultados.py  # Analysis script for results
+│   ├── common.py                       # Common utilities and functions
+│   ├── compress-ffmpeg.py              # Script for compression using FFmpeg
+│   ├── decoder.py                      # JPEG decoder implementation
+│   ├── decoder_test.py                 # Unit tests for decoder
+│   ├── encoder.py                      # JPEG encoder implementation
+│   ├── encoder_test.py                 # Unit tests for encoder
+│   ├── step0_preprocessing.py                    # Preprocessing steps before encoding
+│   ├── step0_preprocessing_test.py               # Unit Tests for preprocessing
+│   ├── step1_color_space_conversion.py           # Color space conversion step in encoding
+│   ├── step1_color_space_conversion_test.py      # Unit Tests for color space conversion
+│   ├── step2_chrominance_downsampling.py         # Chrominance downsampling step
+│   ├── step2_chrominance_downsampling_test.py    # Unit Tests for chrominance downsampling
+│   ├── step3_discrete_cosine_transform.py        # DCT implementation
+│   ├── step3_discrete_cosine_transform_test.py   # Unit Tests for DCT
+│   ├── step4_quatization.py                      # Quantization step
+│   ├── step4_quatization_test.py                 # Unit Tests for quantization
+│   ├── step5_dpcm.py                             # DPCM (Differential Pulse Code Modulation) step
+│   ├── step5_dpcm_test.py                        # Unit Tests for DPCM
+│   ├── step6_run_length_huffman_encoding.py      # Run-length and Huffman encoding step
+│   ├── step6_run_length_huffman_encoding_test.py # Unit Tests for encoding
+│   └── step10_error_analysis.py # Error analysis module
+├── all-python-scripts.sh # Script to run all Python files
+├── flake.lock            # Dependency lock file for Flake
+├── flake.nix             # Nix file for building the environment
+├── generate-images.sh    # Script to generate images for testing
+├── LICENSE               # License information for the project
+├── makefile              # Makefile for build automation
+├── README.md             # This README file
+└── requirements.txt      # Python dependencies
+```
+
+<!--Report Project Structure End-->
+
+## Generating report
+
+All available tools for compiling the report pdf are declared through nix
+flakes. To manually activate it, run:
+
+```sh
+nix develop
+```
+
+For example to activate the nix flake profile named `pedro`:
+
+```sh
+nix develop .#pedro
+```
+
+To compile the report
+
+```sh
+make docs/relatorio.pdf
+```
 
 ## License
 
