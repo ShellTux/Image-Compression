@@ -5,6 +5,7 @@ REPORT         = docs/relatorio.pdf
 
 PANDOC_OPTS += --resource-path=docs
 PANDOC_OPTS += --filter=pandoc-include
+PANDOC_OPTS += --pdf-engine=xelatex
 
 %.pdf: %.md $(PYTHON_SCRIPTS)
 	./generate-images.sh

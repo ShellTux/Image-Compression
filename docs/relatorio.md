@@ -15,14 +15,15 @@ header-includes: |
     \usepackage{fdsymbol}
     \usepackage{newunicodechar}
     \usepackage[a4paper, margin=1in]{geometry}
-    \newunicodechar{ϵ}{\ensuremath{\epsilon}}
     \usepackage{float}
     \makeatletter
     \def\fps@figure{H}
     \makeatother
 ---
 
-<!-- TODO: Depois de terminar o relatório, adicionar code snippets.-->
+## 0: Explicação da estrutura do projeto
+
+!include`snippetStart="<!--Report Project Structure Start-->", snippetEnd="<!--Report Project Structure End-->"` README.md
 
 ## 1: Compressão das imagens
 
